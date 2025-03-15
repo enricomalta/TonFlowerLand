@@ -18,15 +18,6 @@ function initializeTonConnect() {
 const API_URL = "https://ton-flower-land-back-end.vercel.app";
 const btnWalletConnect = document.getElementById("btnWalletConnect");
 
-// Garantir que a função de inicialização seja chamada após o carregamento completo do script
-window.onload = function() {
-    if (typeof TonConnect !== "undefined") {
-        initializeTonConnect();
-    } else {
-        console.error("TonConnect não foi carregado corretamente.");
-    }
-};
-
 
 console.log("TonConnect carregado:", tonConnect);
 
