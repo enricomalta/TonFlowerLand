@@ -50,7 +50,7 @@ async function connectWallet() {
         console.log("🔗 Tentando conectar à Wallet...");
 
         // 2. Conectar à wallet do telegram
-        const connectedWallet = await tonConnect.connect({ name: 'telegram' });
+        const connectedWallet = await tonConnect.connect({ name: 'Wallet' });
         console.log(connectedWallet); // Verifique o que está sendo retornado aqui
         
         // 3. Verificar se a carteira foi conectada corretamente
