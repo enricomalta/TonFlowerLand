@@ -1,3 +1,5 @@
+import { TonConnect } from 'https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+esm';
+
 let tonConnect;
 
 // Função para inicializar o TonConnect
