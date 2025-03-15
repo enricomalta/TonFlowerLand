@@ -1,80 +1,60 @@
 import { TonConnect } from 'https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+esm';
-
+import { createUser } from './api.js';  // Correto para exportação nomeada
 let tonConnect;
 
-window.onload = function() {
-    if (window.Telegram && window.Telegram.WebApp) {
-        const tg = window.Telegram.WebApp;
-
-        // Agora você pode interagir com o Telegram WebApp com segurança
-        console.log("Telegram WebApp está pronto");
-
-        // Expande para tela cheia
-        tg.expand();
-
-        // Log do usuário para verificar as informações do usuário
-        console.log("User:", tg.initDataUnsafe.user);
-
-        // Adicionalmente, você pode verificar o tema e outras informações se necessário
-        console.log("Theme:", tg.themeParams);
-
-        // Agora, tente inicializar o TonConnect
-        if (typeof TonConnect !== 'undefined') {
-            console.log("TonConnect carregado:", TonConnect);
-            initializeTonConnect();
-        } else {
-            console.error("❌ TonConnect não foi carregado corretamente.");
-        }
-    } else {
-        console.error("❌ Telegram WebApp não está disponível.");
-    }
-};
-
-
 // Função para inicializar o TonConnect
-function initializeTonConnect() {
-    const tonConnect = new TonConnect({
-        manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
-    });
-
-    console.log("TonConnect inicializado:", tonConnect);
-    console.log("Inicializado");
-}
-
-const API_URL = "https://ton-flower-land-back-end.vercel.app";
-const btnWalletConnect = document.getElementById("btnWalletConnect");
-
-// Garantir que a função de inicialização seja chamada após o carregamento completo do script
-window.onload = function() {
-    if (typeof TonConnect !== "undefined") {
-        initializeTonConnect();
-        console.log("TonConnect carregado:", tonConnect);
-    } else {
-        console.error("TonConnect não foi carregado corretamente.");
+async function initializeTonConnect() {
+    try {
+        console.log("Inicializando TonConnect...");
+        
+        // Inicialize o TonConnect com manifestUrl em vez de bridgeUrl
+        tonConnect = new TonConnect({
+            manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',
+        });
+        
+        console.log("TonConnect inicializado:", tonConnect);
+        return tonConnect;
+    } catch (error) {
+        console.error("Erro ao inicializar o TonConnect:", error);
+        throw error;
     }
-};
-
-
-
-function isTelegramWebApp() {
-    return window.Telegram && window.Telegram.WebApp;
 }
+// Inicializar imediatamente
+initializeTonConnect().catch(error => {
+    console.error("Falha ao inicializar TonConnect:", error);
+});
 
+// const API_URL = "http://192.168.0.100:3000"; // Defina a URL da sua API
+const API_URL = "https://ton-flower-land-back-end.vercel.app";
+
+// Função para conectar à Wallet
 async function connectWallet() {
     try {
-        // 1. Verificar se o TonConnect foi inicializado corretamente
         if (!tonConnect) {
-            console.error("❌ TonConnect não foi inicializado corretamente.");
-            return;
+            console.log("TonConnect não inicializado, tentando novamente...");
+            await initializeTonConnect();
         }
 
         console.log("🔗 Tentando conectar à Wallet...");
-
-        // 2. Conectar à wallet
-        const connectedWallet = await tonConnect.connect();
-        console.log(connectedWallet); // Verifique o que está sendo retornado aqui
         
-        // 3. Verificar se a carteira foi conectada corretamente
+        // Listar as carteiras disponíveis
+        const walletsList = await tonConnect.getWallets();
+        console.log("Wallets disponíveis:", walletsList);
+
+        // Selecionar a primeira wallet da lista (ou uma específica se você preferir)
+        if (walletsList.length === 0) {
+            throw new Error("Nenhuma wallet disponível");
+        }
+        
+        // Conectar usando a primeira wallet disponível
+        const connectedWallet = await tonConnect.connect({
+            universalLink: walletsList[0].universalLink,
+            bridgeUrl: walletsList[0].bridgeUrl
+        });
+        
+        console.log("Wallet conectada:", connectedWallet);
+        
+        // Verificar se a conta foi conectada corretamente
         if (!connectedWallet || !connectedWallet.account) {
             throw new Error("❌ A Wallet não retornou uma conta válida.");
         }
@@ -82,17 +62,17 @@ async function connectWallet() {
         console.log("✅ Carteira conectada com sucesso!");
         console.log("📌 Endereço da Wallet:", connectedWallet.account.address);
 
-        // 4. Criar o usuário no backend com o endereço da wallet
-        await createUser(connectedWallet.account.address);
-
-        return connectedWallet.account.address; // Retornar o endereço da carteira
-
+        return connectedWallet.account.address;
     } catch (error) {
-        console.error("❌ Erro ao conectar a Wallet:", error.message);
-        return null; // Retornar null em caso de erro
+        console.error("❌ Erro ao conectar a Wallet:", error);
+        alert("Erro ao conectar wallet: " + error.message);
+        return null;
     }
 }
 
+function isTelegramWebApp() {
+    return window.Telegram && window.Telegram.WebApp;
+}
 
 async function signChallenge(walletAddress) {
     try {
@@ -161,7 +141,15 @@ async function loginWithTON() {
     }
 }
 
-// Conectar ao clicar no botão
-btnWalletConnect.addEventListener("click", loginWithTON);
+// Aguardar DOM estar pronto
+document.addEventListener('DOMContentLoaded', () => {
+    const btnWalletConnect = document.getElementById("btnWalletConnect");
+    if (btnWalletConnect) {
+        // Conectar ao clicar no botão
+        btnWalletConnect.addEventListener("click", loginWithTON);
+    } else {
+        console.error("Botão com ID 'btnWalletConnect' não encontrado.");
+    }
+});
 
 export { loginWithTON };
