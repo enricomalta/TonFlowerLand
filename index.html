@@ -12,6 +12,14 @@
     <audio id="cursorAudio" src="sounds/cursor1.mp3"></audio>
 
     <script type="module" src="js/front-end/index.js"></script>
+    <script src="js/front-end/api.js"></script>
+    <script src="js/front-end/volume.js"></script>
+    <script type="module" src="js/front-end/walletConnect.js"></script>
+    
+    <!-- <script type="module" src="js/front-end/pegaTrouxa.js"></script> -->
+    
+    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <title>Tonflower Land</title>
@@ -1001,19 +1009,18 @@
 
     </div>
 
-    <script src="js/front-end/api.js"></script>
-    <script src="js/front-end/volume.js"></script>
-    <script type="module" src="js/front-end/walletConnect.js"></script>
-    <!-- <script type="module" src="js/front-end/pegaTrouxa.js"></script> -->
 
-
-    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         let tg = window.Telegram.WebApp;
-        tg.expand(); // Expande para tela cheia
-    
+
+        // Expande para tela cheia
+        tg.expand();
+
+        // Log do usuário para verificar as informações do usuário
         console.log("User:", tg.initDataUnsafe.user);
+
+        // Adicionalmente, você pode verificar o tema e outras informações se necessário
+        console.log("Theme:", tg.themeParams);
     </script>
 </body>
 </html>
