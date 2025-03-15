@@ -8,30 +8,47 @@ const tonConnect = new TonConnectSDK.TonConnect({
 
 console.log("TonConnect carregado:", tonConnect);
 
+function isTelegram() {
+    return window.Telegram && window.Telegram.WebApp;
+}
 
 async function connectWallet() {
     try {
-        // Conectar a carteira
         const wallets = await tonConnect.getWallets();
         console.log("Carteiras disponíveis:", wallets);
 
-        if (!wallets.length) {
-            alert("Nenhuma carteira disponível. Instale uma carteira TON.");
-            return null;
+        // Se estiver rodando no Telegram, tenta conectar à Wallet do Telegram
+        if (isTelegram()) {
+            const telegramWallet = wallets.find(wallet => wallet.appName === "telegram-wallet");
+
+            if (!telegramWallet) {
+                throw new Error("A Wallet do Telegram não foi detectada.");
+            }
+
+            console.log("Conectando à Wallet do Telegram...");
+            await tonConnect.connect({ name: "telegram-wallet" });
+
+            console.log("✅ Carteira conectada com sucesso!");
+            return;
         }
 
-        // Conectar a primeira carteira disponível
-        await tonConnect.connect({ jsBridgeKey: wallets[0].jsBridgeKey });
+        // Caso contrário, conecta a uma carteira injetada no navegador
+        const injectedWallet = wallets.find(wallet => wallet.injected);
+        
+        if (!injectedWallet) {
+            throw new Error("Nenhuma carteira injetada encontrada. Use QR Code ou outro método de conexão.");
+        }
 
-        const walletInfo = await tonConnect.account;
-        console.log("Carteira conectada:", walletInfo);
-        return walletInfo.address;
+        console.log("Conectando à carteira:", injectedWallet.name);
+        await tonConnect.connect({ name: injectedWallet.appName });
+
+        console.log("✅ Carteira conectada com sucesso!");
     } catch (error) {
         console.error("Erro ao conectar carteira:", error);
-        alert("Erro ao conectar carteira.");
-        return null;
+        alert(error.message);
     }
 }
+
 
 async function signChallenge(walletAddress) {
     try {
