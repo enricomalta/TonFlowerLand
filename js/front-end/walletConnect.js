@@ -1,22 +1,23 @@
-const API_URL = "https://ton-flower-land-back-end.vercel.app";
-const btnWalletConnect = document.getElementById("btnWalletConnect");
-
-
+let tonConnect;
 
 function initializeTonConnect() {
     console.log("TonConnect foi carregado com sucesso!");
-    const tonConnect = new TonConnect({
+    tonConnect = new TonConnect({
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
     });
+
+    console.log("TonConnect inicializado:", tonConnect);
 }
 
+
+const API_URL = "https://ton-flower-land-back-end.vercel.app";
+const btnWalletConnect = document.getElementById("btnWalletConnect");
 
 console.log("TonConnect carregado:", tonConnect);
 
 function isTelegramWebApp() {
     return window.Telegram && window.Telegram.WebApp;
 }
-
 
 async function connectWallet() {
     try {
@@ -36,26 +37,16 @@ async function connectWallet() {
         if (!connectedWallet || !connectedWallet.account) {
             throw new Error("❌ A Wallet não retornou uma conta válida.");
         }
-        
-        // 4. Verificar o Objeto wallet 
-        if (connectedWallet && connectedWallet.account && connectedWallet.account.address) {
-            console.log("Carteira conectada:", connectedWallet.account.address);
-        } else {
-            console.error("Erro: informações da carteira não encontradas.");
-            return;
-        }
-    
-        // 5. Se a wallet foi conectada corretamente, logar informações de sucesso
+
         console.log("✅ Carteira conectada com sucesso!");
         console.log("📌 Endereço da Wallet:", connectedWallet.account.address);
 
-        // 6. Criar o usuário no backend com o endereço da wallet
+        // 4. Criar o usuário no backend com o endereço da wallet
         await createUser(connectedWallet.account.address);
 
         return connectedWallet.account.address; // Retornar o endereço da carteira
 
     } catch (error) {
-        // 7. Captura de erros
         console.error("❌ Erro ao conectar a Wallet:", error.message);
         return null; // Retornar null em caso de erro
     }
