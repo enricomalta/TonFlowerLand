@@ -26,7 +26,7 @@ async function connectWallet() {
 
         // 2. Conectar à wallet
         const connectedWallet = await tonConnect.connect();
-        console.log(wallet); // Verifique o que está sendo retornado aqui
+        console.log(connectedWallet); // Verifique o que está sendo retornado aqui
         
         // 3. Verificar se a carteira foi conectada corretamente
         if (!connectedWallet || !connectedWallet.account) {
@@ -34,10 +34,11 @@ async function connectWallet() {
         }
         
         // 4. Verificar o Objeto wallet 
-        if (wallet && wallet.account && wallet.account.address) {
-            console.log("Carteira conectada:", wallet.account.address);
+        if (connectedWallet && connectedWallet.account && connectedWallet.account.address) {
+            console.log("Carteira conectada:", connectedWallet.account.address);
         } else {
             console.error("Erro: informações da carteira não encontradas.");
+            return;
         }
     
         // 5. Se a wallet foi conectada corretamente, logar informações de sucesso
@@ -47,9 +48,12 @@ async function connectWallet() {
         // 6. Criar o usuário no backend com o endereço da wallet
         await createUser(connectedWallet.account.address);
 
+        return connectedWallet.account.address; // Retornar o endereço da carteira
+
     } catch (error) {
         // 7. Captura de erros
         console.error("❌ Erro ao conectar a Wallet:", error.message);
+        return null; // Retornar null em caso de erro
     }
 }
 
