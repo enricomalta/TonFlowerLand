@@ -9,6 +9,7 @@ function initializeTonConnect() {
     // Inicialize o TonConnect
     tonConnect = new TonConnect({
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
+        buttonRootId: '<btnWalletConnect>'
     });
 
     tonConnectUI.uiOptions = {
