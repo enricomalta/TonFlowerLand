@@ -11,115 +11,96 @@ console.log("TonConnect carregado:", tonConnect);
 
 async function connectWallet() {
     try {
-        await tonConnect.connectWallet();
+        // Conectar a carteira
         const wallets = await tonConnect.getWallets();
-        if (wallets.length > 0) {
-            const wallet = wallets[0];
-            const walletAddress = wallet.account.address;
+        console.log("Carteiras disponíveis:", wallets);
 
-            console.log("Wallet conectada:", walletAddress);
-
-            // Gerar um desafio (challenge) no backend
-            const response = await fetch(`${API_URL}/generate-challenge`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ walletAddress })
-            });
-
-            const { challenge } = await response.json();
-
-            // Assinar o desafio com a carteira
-            const signature = await wallet.sign(challenge);
-
-            // Enviar a assinatura para o backend validar
-            const verifyResponse = await fetch(`${API_URL}/verify-signature`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ walletAddress, signature })
-            });
-
-            const { token } = await verifyResponse.json();
-
-            console.log("Token JWT recebido:", token);
-
-            // Salvar no LocalStorage ou Context API para usar depois
-            localStorage.setItem("authToken", token);
-
-        } else {
-            console.error("Nenhuma carteira encontrada.");
+        if (!wallets.length) {
+            alert("Nenhuma carteira disponível. Instale uma carteira TON.");
+            return null;
         }
+
+        // Conectar a primeira carteira disponível
+        await tonConnect.connect({ jsBridgeKey: wallets[0].jsBridgeKey });
+
+        const walletInfo = await tonConnect.account;
+        console.log("Carteira conectada:", walletInfo);
+        return walletInfo.address;
     } catch (error) {
         console.error("Erro ao conectar carteira:", error);
+        alert("Erro ao conectar carteira.");
+        return null;
     }
 }
 
-
 async function signChallenge(walletAddress) {
-    console.log("🔄 Solicitando desafio do backend...");
-    
-    // Passo 2: Solicitar o desafio do backend
-    const response = await fetch(`${API_URL}/generate-challenge`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ walletAddress: walletAddress }),
-    });
+    try {
+        console.log("🔄 Solicitando desafio do backend...");
+        const response = await fetch(`${API_URL}/generate-challenge`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ walletAddress }),
+        });
 
-    const data = await response.json();
-    const challenge = data.challenge;
+        if (!response.ok) {
+            throw new Error("Erro ao obter desafio do backend.");
+        }
 
-    console.log("📝 Desafio recebido:", challenge);
+        const { challenge } = await response.json();
+        console.log("Desafio recebido:", challenge);
 
-    console.log("🔑 Assinando desafio com a carteira TON...");
-    // Passo 3: Assinar a mensagem com a carteira TON
-    const result = await tonConnect.sendTransaction({
-        messages: [{ address: walletAddress, payload: challenge }],
-    });
+        // Assinar o desafio usando a carteira
+        const signature = await tonConnect.sendTransaction({
+            messages: [{ address: walletAddress, payload: challenge }],
+        });
 
-    console.log("✅ Assinatura gerada:", result);
-    return { signature: result, challenge };
+        console.log("Assinatura:", signature);
+        return signature;
+    } catch (error) {
+        console.error("Erro ao assinar desafio:", error);
+        alert("Erro ao assinar desafio.");
+        return null;
+    }
 }
 
-
 async function verifySignature(walletAddress, signature) {
-    // Passo 4: Enviar assinatura para o backend verificar
-    console.log("🔄 Verificando assinatura no backend...");
+    try {
+        console.log("🔄 Verificando assinatura no backend...");
+        const response = await fetch(`${API_URL}/verify-signature`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ walletAddress, signature }),
+        });
 
-    const response = await fetch(`${API_URL}/verify-signature`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ walletAdress: walletAddress, signature }),
-    });
+        const data = await response.json();
+        console.log("Resposta do backend:", data);
 
-    const data = await response.json();
-    console.log("✅ Token do Firebase recebido:", data.firebaseToken);
-    return data.firebaseToken;
+        if (data.verified) {
+            alert("✅ Login bem-sucedido!");
+        } else {
+            alert("❌ Assinatura inválida.");
+        }
+    } catch (error) {
+        console.error("Erro ao verificar assinatura:", error);
+        alert("Erro ao verificar assinatura.");
+    }
 }
 
 async function loginWithTON() {
-    console.log("Botão de login clicado!");
     try {
-        // 1 Conectar a carteira
         const walletAddress = await connectWallet();
-        console.log("Carteira conectada:", walletAddress);
+        if (!walletAddress) return;
 
-        // 2 Assinar o desafio gerado pelo backend
-        const { signature } = await signChallenge(walletAddress);
-        console.log("Assinatura gerada:", signature);
+        const signature = await signChallenge(walletAddress);
+        if (!signature) return;
 
-        // 3 Verificar assinatura e obter token do Firebase
-        const firebaseToken = await verifySignature(walletAddress, signature);
-        console.log("Token do Firebase:", firebaseToken);
-
-        // 4 Logar no Firebase
-        await firebase.auth().signInWithCustomToken(firebaseToken);
-        console.log("Usuário autenticado com sucesso!");
+        await verifySignature(walletAddress, signature);
     } catch (error) {
-        console.error("Erro ao autenticar:", error);
+        console.error("Erro no login com TON:", error);
     }
 }
 
-
-// Connect Wallet
+// Conectar ao clicar no botão
 btnWalletConnect.addEventListener("click", loginWithTON);
 
 export { loginWithTON };
