@@ -8,47 +8,40 @@ const tonConnect = new TonConnectSDK.TonConnect({
 
 console.log("TonConnect carregado:", tonConnect);
 
-function isTelegram() {
-    return window.Telegram && window.Telegram.WebApp;
-}
-
-async function connectWallet() {
+async function connectTelegramWallet() {
     try {
-        const wallets = await tonConnect.getWallets();
-        console.log("Carteiras disponíveis:", wallets);
-
-        // Se estiver rodando no Telegram, tenta conectar à Wallet do Telegram
-        if (isTelegram()) {
-            const telegramWallet = wallets.find(wallet => wallet.appName === "telegram-wallet");
-
-            if (!telegramWallet) {
-                throw new Error("A Wallet do Telegram não foi detectada.");
-            }
-
-            console.log("Conectando à Wallet do Telegram...");
-            await tonConnect.connect({ name: "telegram-wallet" });
-
-            console.log("✅ Carteira conectada com sucesso!");
-            return;
-        }
-
-        // Caso contrário, conecta a uma carteira injetada no navegador
-        const injectedWallet = wallets.find(wallet => wallet.injected);
-        
-        if (!injectedWallet) {
-            throw new Error("Nenhuma carteira injetada encontrada. Use QR Code ou outro método de conexão.");
-        }
-
-        console.log("Conectando à carteira:", injectedWallet.name);
-        await tonConnect.connect({ name: injectedWallet.appName });
-
-        console.log("✅ Carteira conectada com sucesso!");
+        console.log("Tentando conectar à Wallet do Telegram...");
+        await tonConnect.connect({ name: "telegram-wallet" });
+        console.log("✅ Conectado com sucesso!");
     } catch (error) {
-        console.error("Erro ao conectar carteira:", error);
-        alert(error.message);
+        console.error("Erro ao conectar à Wallet do Telegram:", error);
     }
 }
 
+
+async function connectWallet() {
+    try {
+        // Conectar a carteira
+        const wallets = await tonConnect.getWallets();
+        console.log("Carteiras disponíveis:", wallets);
+
+        if (!wallets.length) {
+            alert("Nenhuma carteira disponível. Instale uma carteira TON.");
+            return null;
+        }
+
+        // Conectar a primeira carteira disponível
+        await tonConnect.connect({ jsBridgeKey: wallets[0].jsBridgeKey });
+
+        const walletInfo = await tonConnect.account;
+        console.log("Carteira conectada:", walletInfo);
+        return walletInfo.address;
+    } catch (error) {
+        console.error("Erro ao conectar carteira:", error);
+        alert("Erro ao conectar carteira.");
+        return null;
+    }
+}
 
 async function signChallenge(walletAddress) {
     try {
@@ -105,7 +98,7 @@ async function verifySignature(walletAddress, signature) {
 
 async function loginWithTON() {
     try {
-        const walletAddress = await connectWallet();
+        const walletAddress = await connectTelegramWallet();
         if (!walletAddress) return;
 
         const signature = await signChallenge(walletAddress);
