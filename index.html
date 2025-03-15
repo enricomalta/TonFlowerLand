@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/index.css"> 
+    
+    <audio id="musicAudio" src="sounds/musicTheme.mp3" autoplay loop></audio>
+    <audio id="fxAudio" src="sounds/fx2.mp3"></audio>
+    <audio id="fxAudio" src="sounds/recolher.mp3"></audio>
+    <audio id="cursorAudio" src="sounds/cursor1.mp3"></audio>
+
+    <script type="module" src="js/front-end/index.js"></script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+    <title>Tonflower Land</title>
+</head>
+<body>
+
+    <!-- Fundo  -->
+    <div class="fundo column center-v center-h">
+
+        
+        <!-- Display Game -->
+        <div class="gameSceen column">
+
+
+            <!-- Display UI Contadores -->
+            <div class="top row" id="top">
+
+
+                <div class="coins wd-100p column">
+
+                    <div class="criptoNumber row">
+                        <img src="img/ui/ton.png">
+                        <input class="inputIconHeight input" id="criptoBalance" type="text" readonly value="0.00">
+                    </div>
+
+                    <div class="coinNumber row">
+                        <img src="img/ui/sun.png">
+                        <input class="inputIconHeight input" id="tokenBalance" type="text" readonly value="0.00">
+                    </div>
+
+
+                </div>
+
+                <div class="logo wd-100p center-x">
+                    <img src="img/logo.png">
+                </div>
+            
+
+                <div class="config wd-100p center-v justify-end">
+                    <div class="quantityItems row center-x">
+                        <div class="status wd-100p column">
+        
+                            <div class="statusNumber row">
+                                <img class="iconTopGameBar" id="iconStar" src="/img/ui/star.png">
+                                <input class="inputIconHeight input" type="text" id="quantityStar" readonly value="0/100">
+                            </div>
+
+                            <div class="statusNumber row">
+                                <img class="iconTopGameBar" id="iconVaso" src="/img/ui/vaso.png">
+                                <input class="inputIconHeight input" type="text" id="quantityVasos" readonly value="0/100">
+                            </div>
+
+                        </div>
+                    </div>
+                    
+                    <img id="btnConfigOpen" class="pointer center-x" src="img/config.png">
+                </div>
+
+            </div>
+
+            <!-- Display Tela -->
+            <div class="middle flex center-x" id="middle">
+                
+                <!-- Modal Wallet Connect -->
+                <div id="walletModal" class="flex column center-x justify-flex-start">
+                    <div class="titleGame">
+                        <img id="startScreen" src="img/startScreen.png">
+                    </div>
+                    <div class="btnWallet pointer" id="btnWalletConnect">
+                        <h1>Connect Wallet</h1>
+                    </div>
+                </div>
+
+                <!-- Modal Configurações -->
+                <div id="configModal" class="flex column">
+                    <div class="web3 column center-x">
+                        <div class="web3-top row center-x">
+                            <div class="web3-title">Configurações</div>
+                            <!-- <button class="pointer close-btn-right" id="btnConfigClose">X</button> -->
+                        </div>
+                        <div class="web3-down column">
+                            <div class="web3-endereco">Wallet:</div>
+                            <div class="web3-adress">
+                                <input class="input2" type="text" id="adressInput" readonly>
+                                <img class="disconnectWallet pointer" src="img/sair.png" id="btnWalletDisconnect">
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="soundConfig column center-x">
+
+                        <div class="soundMusic flex column center-x">
+                            <div class="row">
+                                <span class="soundTxt"> Som da Música</span>
+                                <img class="pointer volumeMuteImg" src="img/volumeMax.png" id="toggleMuteMusic" onclick="toggleMute('music')">
+                            </div>
+                            <input type="range" id="musicVolume" value="100" max="100" step="1">
+                        </div>
+
+                        <div class="soundFx flex column center-x">
+                            <div class="row">
+                                <span class="soundTxt"> Som de Efeitos</span>
+                                <img class="pointer volumeMuteImg" src="img/volumeMax.png" id="toggleMuteFx" onclick="toggleMute('fx')">
+                            </div>
+                            <input type="range" id="fxVolume" value="100" max="100" step="1">
+                        </div>
+
+                        <div class="soundCursor flex column center-x">
+                            <div class="row">
+                                <span class="soundTxt"> Som do Cursor</span>
+                                <img class="pointer volumeMuteImg" src="img/volumeMax.png" id="toggleMuteCursor" onclick="toggleMute('cursor')">
+                            </div>
+                            <input type="range" id="cursorVolume" value="100" max="100" step="1">
+                        </div>
+
+                        <div class="btn-save-cofig">
+                            <button class="pointer" id="btnSaveConfig">Save!</button>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Modal Shop -->
+                <div id="shopModal" class="row justify-s-e">
+
+                    <div class="shopMenuModal" id="shopMenuModal">
+
+                        <div class="selectMenuGame column flex center-x">
+                            <div class="btnSelectMenuGame pointer" id="">Market</div>
+                            <div class="btnSelectMenuGame pointer" id="btnShopOpen">Shop</div>
+                        </div>
+
+                    </div>
+
+                    <div class="subShopModal row justify-s-e" id="subShopModal">
+                        
+                        <!-- Arrow Last -->
+                        <div class="arrow flex center-x" id="shopArrowLast">
+                            <div class="arrow-last" id="arrowLast">
+                                <img class="arrowImg pointer" src="img/last.png">
+                            </div>
+                        </div>
+
+                        <!-- Slots Shop -->
+                        <div class="column center-x">
+
+                            <!-- Slots 1 - 2 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot1">
+                                        <h1 id="titleSlotName1"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot1">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot1">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue1">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot2">
+                                        <h1 id="titleSlotName2"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot2">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot2">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue2">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 3 - 4 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot3">
+                                        <h1 id="titleSlotName3"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot3">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot3">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue3">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot4">
+                                        <h1 id="titleSlotName4"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot4">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot4">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue4">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 5 - 6 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot5">
+                                        <h1 id="titleSlotName5"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot5">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot5">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue5">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot6">
+                                        <h1 id="titleSlotName6"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot6"></div>
+                                    <div class="priceSlot flex center-x" id="priceSlot6">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue6">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 7 - 8 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot7">
+                                        <h1 id="titleSlotName7"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot7">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot7">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue7">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot8">
+                                        <h1 id="titleSlotName8"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot8">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot8">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue8">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Slots 9 - 10 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot9">
+                                        <h1 id="titleSlotName9"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot9">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot9">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue9">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot10">
+                                        <h1 id="titleSlotName10"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot10">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot10">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue10">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Slots 11 - 12 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot11">
+                                        <h1 id="titleSlotName11"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot11">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot11">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue11">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot12">
+                                        <h1 id="titleSlotName12"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot12">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot12">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue12">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Slots 13 - 14 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot13">
+                                        <h1 id="titleSlotName13"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot13">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot13">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue13">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot14">
+                                        <h1 id="titleSlotName14"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot14">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot14">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue14">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Slots 15 - 16 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot15">
+                                        <h1 id="titleSlotName15"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot15">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot15">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue15">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot16">
+                                        <h1 id="titleSlotName16"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot16">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot16">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue16">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Slots 17 - 18 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot17">
+                                        <h1 id="titleSlotName17"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot17">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot17">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue17">0.00</h1>
+                                    </div>
+                                </div>
+
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot18">
+                                        <h1 id="titleSlotName18"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot18">
+                                        <img class="shopImg" src="">
+                                    </div>
+                                    <div class="priceSlot flex center-x" id="priceSlot18">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue18">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SLOTS UTILITARIOS -->
+
+                            <!-- Slots 19 - 20 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot19">
+                                        <h1 id="titleSlotName19"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot19"></div>
+                                    <div class="priceSlot flex center-x" id="priceSlot19">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue19">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot20">
+                                        <h1 id="titleSlotName20"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot20"></div>
+                                    <div class="priceSlot flex center-x" id="priceSlot20">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue20">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Slots 21 - 22 -->
+                            <div class="shopLayoutSlot row center-x">
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot21">
+                                        <h1 id="titleSlotName21"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot21"></div>
+                                    <div class="priceSlot flex center-x" id="priceSlot21">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue21">0.00</h1>
+                                    </div>
+                                </div>
+                                <div class="shopSlot pointer">
+                                    <div class="titleSlot flex center-x" id="titleSlot22">
+                                        <h1 id="titleSlotName22"></h1>
+                                    </div>
+                                    <div class="shopSlotItem flex center-x" id="shopSlot22"></div>
+                                    <div class="priceSlot flex center-x" id="priceSlot22">
+                                        <img id="iconToken" src="img/ui/sun.png">
+                                        <h1 class="priceSlotValue" id="priceSlotValue22">0.00</h1>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                        </div>
+
+                        <!-- Arrow Next -->
+                        <div class="arrow flex center-x" id="shopArrowNext">
+                            <div class="arrow-next" id="shopArrowNext">
+                                <img class="arrowImg pointer" src="img/next.png">
+                            </div>
+                        </div>
+
+                    
+                    </div>
+
+
+                </div>
+
+                <!-- Modal Play -->
+                <div id="playModal" class="column center-x">
+
+                    <!-- 0. Modal de Inspect Planta -->
+                    <div class="overlay" id="overlay"></div>
+                    <div class="modalInformationInspect" id="modalInformationInspect">
+                        <div class="title">
+                            <h1>Informações</h1>
+                        </div>
+                        <p id="modalMessageInspect"></p>
+                        <button class="btn-x-inspect pointer">X</button>
+                    </div>
+
+                    <!-- 0. Modal de Confirmação Planta -->
+                    <div class="modalInformation" id="modalInformation">
+                        <p id="modalMessage"></p>
+                        <button class="btn-sim">Sim! 👍🏻</button>
+                        <button class="btn-nao">Não! 👎🏻</button>
+                    </div>
+
+                    <!-- 1. Menu Inventario/Jogar/Combinar -->
+                    <div class="playMenuOpen column center-x" id="playMenuOpen">
+
+                        <div class="selectMenuGame column flex center-x">
+                            <div class="btnSelectMenuGame pointer" id="btnInventoryOpen">Sementes</div>
+                            <div class="btnSelectMenuGame pointer" id="btnPlayOpen">Vasos</div>
+                            <div class="btnSelectMenuGame btnCraft pointer" id="btnCraft">Combinar</div>
+                        </div>
+                    
+                    </div>
+                    
+                    <!-- 2. Play Inventory -->
+                    <div class="playInvetory row" id="playInvetory">
+                        
+                        <!-- Arrow Last -->
+                        <div class="arrow flex center-x" id="playArrowLastInventory">
+                            <div class="arrow-last">
+                                <img class="arrowImg pointer" src="img/last.png">
+                            </div>
+                        </div>
+
+                        <!-- Inventory Conteudo -->
+                        <div class="playInvetoryContent column flex center-x" id="playInvetoryContent">
+
+                            <!-- Slots 1/2 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot 1 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot1">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot1">
+                                        <h1 class="titleInvetorySlotName1"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory flex center-x" id="imgSlotItemInventory1">
+                                        <img id="imgSlotInventory1" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot1">
+                                        <h1 id="quantityItemInventory1" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot 2 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot2">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot2">
+                                        <h1 class="titleInvetorySlotName2"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory2">
+                                        <img id="imgSlotInventory2" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot2">
+                                        <h1 id="quantityItemInventory2" src=""></h1>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Slots 3/4 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot 3 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot3">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot3">
+                                        <h1 class="titleInvetorySlotName3"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory3">
+                                        <img id="imgSlotInventory3" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot3">
+                                        <h1 id="quantityItemInventory3" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot 4 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot4">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot4">
+                                        <h1 class="titleInvetorySlotName4"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory4">
+                                        <img id="imgSlotInventory4" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot4">
+                                        <h1 id="quantityItemInventory4" src=""></h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 5/6 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot  5 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot5">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot5">
+                                        <h1 class="titleInvetorySlotName5"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory5">
+                                        <img id="imgSlotInventory5" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot5">
+                                        <h1 id="quantityItemInventory5" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot  6 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot6">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot6">
+                                        <h1 class="titleInvetorySlotName6"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory6">
+                                        <img id="imgSlotInventory6" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot6">
+                                        <h1 id="quantityItemInventory6" src=""></h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 7/8 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot  7 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot7">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot7">
+                                        <h1 class="titleInvetorySlotName7"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory7">
+                                        <img id="imgSlotInventory7" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot7">
+                                        <h1 id="quantityItemInventory7" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot  8 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot8">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot8">
+                                        <h1 class="titleInvetorySlotName8"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory8">
+                                        <img id="imgSlotInventory8" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot8">
+                                        <h1 id="quantityItemInventory8" src=""></h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 9/10 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot  9 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot9">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot9">
+                                        <h1 class="titleInvetorySlotName9"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory9">
+                                        <img id="imgSlotInventory9" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot9">
+                                        <h1 id="quantityItemInventory9" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot  10 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot10">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot10">
+                                        <h1 class="titleInvetorySlotName10"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory10">
+                                        <img id="imgSlotInventory10" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot10">
+                                        <h1 id="quantityItemInventory10" src=""></h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 11/12 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot  11 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot11">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot11">
+                                        <h1 class="titleInvetorySlotName11"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory11">
+                                        <img id="imgSlotInventory11" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot11">
+                                        <h1 id="quantityItemInventory11" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot  12 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot12">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot12">
+                                        <h1 class="titleInvetorySlotName12"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory12">
+                                        <img id="imgSlotInventory12" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot12">
+                                        <h1 id="quantityItemInventory12" src=""></h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 13/14 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot  13 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot13">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot13">
+                                        <h1 class="titleInvetorySlotName13"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory13">
+                                        <img id="imgSlotInventory13" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot13">
+                                        <h1 id="quantityItemInventory13" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot  14 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot14">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot14">
+                                        <h1 class="titleInvetorySlotName14"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory14">
+                                        <img id="imgSlotInventory14" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot14">
+                                        <h1 id="quantityItemInventory14" src=""></h1>
+                                    </div>
+                                </div>
+                            </div>                            
+                            
+                            <!-- Slots 15/16 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot  15 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot15">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot15">
+                                        <h1 class="titleInvetorySlotName15"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory15">
+                                        <img id="imgSlotInventory9" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot15">
+                                        <h1 id="quantityItemInventory15" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot  16 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot16">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot16">
+                                        <h1 class="titleInvetorySlotName16"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory16">
+                                        <img id="imgSlotInventory16" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot16">
+                                        <h1 id="quantityItemInventory16" src=""></h1>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slots 17/18 -->
+                            <div class="playInvetorySlots row">
+                                <!-- Slot  17 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot17">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot17">
+                                        <h1 class="titleInvetorySlotName17"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory17">
+                                        <img id="imgSlotInventory17" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot17">
+                                        <h1 id="quantityItemInventory17" src=""></h1>
+                                    </div>
+                                </div>
+
+                                <!-- Slot  18 -->
+                                <div class="playInvetorySlot" id="playInvetorySlot18">
+                                    <div class="titleInvetorySlot" id="titleInvetorySlot18">
+                                        <h1 class="titleInvetorySlotName18"></h1>
+                                    </div>
+
+                                    <div class="imgSlotItemInventory" id="imgSlotItemInventory18">
+                                        <img id="imgSlotInventory18" src="">
+                                    </div>
+
+                                    <div class="quantityItemSlot" id="quantityItemSlot18">
+                                        <h1 id="quantityItemInventory18" src=""></h1>
+                                    </div>
+                                </div>
+                             </div>
+
+                        </div>
+
+                        <!-- Arrow Next -->
+                        <div class="arrow flex center-x" id="playArrowNextInventory">
+                            <div class="arrow-next">
+                                <img class="arrowImg pointer" src="img/next.png">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- 3. Play Game Vasos -->
+                    <div class="playGameBoard column" id="playGameBoard">
+
+                        <!-- Contadores -->
+                        <div class="top-gameboard row center-x" id="topGameBoard">
+
+                            <div class="quantityItems flex center-x">
+                                <img class="iconTopGameBar" id="iconTopGameBar2" src="/img/ui/regador.png">
+                                <input class="input" type="text" id="quantityAgua" value="0">
+                            </div>
+                            <div class="quantityItems flex center-x">
+                                <img class="iconTopGameBar" src="/img/ui/fertilizante.png">
+                                <input class="input" type="text" id="quantityFertilize" value="0">
+                            </div>
+                            <div class="quantityItems flex center-x">
+                                <img class="iconTopGameBar" src="/img/ui/spray.png">
+                                <input class="input" type="text" id="quantityAntiParasita" value="0">
+                            </div>
+                        
+                        </div>
+
+                        <!-- Display Play Game -->
+                        <div class="middle-gameboard row" id="middleGame">
+
+                            <!-- Arrow Last (Game Board) -->
+                            <div class="arrow flex center-x" id="playArrowLastGame">
+                                <div class="arrow-last">
+                                    <img class="arrowImg pointer" src="img/last.png">
+                                </div>
+                            </div>
+
+                            <!-- Game Board Vasos Layout -->
+                            <div class="gameBoardFarm column center-x" id="gameBoardFarm">
+
+                                <!-- Vaso Slot 1 - 2 -->
+                                <div class="vasosLayout row" id="vasosLayout">
+                                    
+                                    <!-- Vaso Slot 1 -->
+                                    <div class="slotVasos column" id="slotVasos1">
+                                        <div class="plantSlot" id="plantSlot1">
+                                            <div class="plantName" id="plantSlotName1">
+                                                <h1 id="plantName1">Vazio</h1>
+                                            </div>
+                                            <div class="slotPhoto">
+                                                <img class="plantPhoto pointer2" id="plantPhoto1" src="">
+                                                <img class="vasoPhoto pointer2" id="vasoPhoto1" src="/img/play/x.png">
+                                            </div>
+                                        </div>
+                                        <div class="plantTimer" id="plantTimer1"></div>
+                                    </div>
+
+                                    <!-- Vaso Slot 2 -->
+                                    <div class="slotVasos column" id="slotVasos2">
+                                        <div class="plantSlot" id="plantSlot2">
+                                            <div class="plantName" id="plantSlotName2">
+                                                <h1 id="plantName2">Vazio</h1>
+                                            </div>
+                                            <div class="slotPhoto">
+                                                <img class="plantPhoto pointer2" id="plantPhoto2" src="/img/plant/0.png">
+                                                <img class="vasoPhoto pointer2" id="vasoPhoto2" src="/img/play/x.png">
+                                            </div>
+                                        </div>
+                                        <div class="plantTimer" id="plantTimer2">
+                                            <h1 id="plantTimer2"></h1>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <!-- Vaso Slot 3 - 4 -->
+                                <div class="vasosLayout row" id="vasosLayout">
+                                    
+                                    <!-- Vaso Slot 3 -->
+                                    <div class="slotVasos column" id="slotVasos3">
+                                        <div class="plantSlot" id="plantSlot3">
+                                            <div class="plantName" id="plantSlotName3">
+                                                <h1 id="plantName3">Vazio</h1>
+                                            </div>
+                                            <div class="slotPhoto">
+                                                <img class="plantPhoto pointer2" id="plantPhoto3" src="/img/plant/0.png">
+                                                <img class="vasoPhoto pointer2" id="vasoPhoto3" src="/img/play/x.png">
+                                            </div>
+                                        </div>
+                                        <div class="plantTimer" id="plantTimer3">
+                                            <h1 id="plantTimer3"></h1>
+                                        </div>
+                                    </div>
+
+                                    <!-- Vaso Slot 4 -->
+                                    <div class="slotVasos column" id="slotVasos4">
+                                        <div class="plantSlot" id="plantSlot4">
+                                            <div class="plantName" id="plantSlotName">
+                                                <h1 id="plantName4">Vazio</h1>
+                                            </div>
+                                            <div class="slotPhoto">
+                                                <img class="plantPhoto pointer2" id="plantPhoto4" src="/img/plant/0.png">
+                                                <img class="vasoPhoto pointer2" id="vasoPhoto4" src="/img/play/x.png">
+                                            </div>
+                                        </div>
+                                        <div class="plantTimer" id="plantTimer4"></div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Arrow Next (Game Board) -->
+                            <div class="arrow flex center-x" id="playArrowNextGame">
+                                <div class="arrow-next">
+                                    <img class="arrowImg pointer" src="img/next.png">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Modal Trade -->
+                <div id="tradeModal" class="column center-x">
+
+                    <div class="swapCryptoToken column center-x">
+                        <div class="walletBalanceCrypto column">
+                            <label id="labelTitle">Deposite:</label>
+                            <input type="text" id="walletBalanceCrypto" placeholder="Min: 0.5 Ton">
+                        </div>
+                        <div class="btnConfirmSwap">
+                            <button id="btnConfirmSwapCT">Confirm</button>
+                        </div>
+                        <div class="balanceTokenSwap column">
+                            <label id="labelTitle">Receba:</label>
+                            <input type="text" id="balanceTokenSwap" placeholder="">
+                        </div>
+                        <div class="infoCardSwapCT"></div>
+                    </div>
+
+                    <div class="swapTokenCrypto column center-x">
+                        <div class="walletBalanceToken column">
+                            <label id="labelTitle">Saque:</label>
+                            <input type="text" id="walletBalanceCrypto" placeholder="Min: 1 Token">
+                        </div>
+                        <div class="btnConfirmSwap">
+                            <button id="btnConfirmSwapTC">Confirm</button>
+                        </div>
+                        <div class="balanceCryptoSwap column">
+                            <label id="labelTitle">Receba:</label>
+                            <input type="text" id="balanceTokenSwap" placeholder="">
+                        </div>
+                        <div class="infoCardSwapTC"></div>
+                    </div>
+                </div>
+
+
+            </div>
+            
+             <!-- Display NAV Botões  -->
+            <div class="down row" id="down">
+                <div class="shop wd-100p center-x">
+                    <img class="pointer" src="img/shop.png" id="btnShopMenu">
+                </div>
+                <div class="play wd-100p center-x">
+                    <img class="pointer" src="img/play.png" id="btnPlayMenu">
+                </div>
+                <div class="trade wd-100p center-x">
+                    <img class="pointer" src="img/trade.png" id="btnTradeOpen">
+                </div>
+            </div>
+            
+        </div>
+
+
+    </div>
+
+    <script src="js/front-end/api.js"></script>
+    <script src="js/front-end/volume.js"></script>
+    <script type="module" src="js/front-end/walletConnect.js"></script>
+    <!-- <script type="module" src="js/front-end/pegaTrouxa.js"></script> -->
+
+
+    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Expande para tela cheia
+    
+        console.log("User:", tg.initDataUnsafe.user);
+    </script>
+</body>
+</html>
