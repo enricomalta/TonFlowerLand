@@ -11,7 +11,10 @@ function initializeTonConnect() {
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
     });
 
-
+    tonConnectUI.uiOptions = {
+      twaReturnUrl: 'https://web.telegram.org/a/#7509571811'
+    };
+    
     const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json', 
     });
