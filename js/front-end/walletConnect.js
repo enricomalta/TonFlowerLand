@@ -47,13 +47,13 @@ const btnWalletConnect = document.getElementById("btnWalletConnect");
 window.onload = function() {
     if (typeof TonConnect !== "undefined") {
         initializeTonConnect();
+        console.log("TonConnect carregado:", tonConnect);
     } else {
         console.error("TonConnect não foi carregado corretamente.");
     }
 };
 
 
-console.log("TonConnect carregado:", tonConnect);
 
 function isTelegramWebApp() {
     return window.Telegram && window.Telegram.WebApp;
