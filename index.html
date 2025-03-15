@@ -1016,7 +1016,22 @@
     </div>
 
     <script src="js/front-end/volume.js"></script>
-    
+
+    <script>
+        window.onload = function() {
+            if (window.Telegram && window.Telegram.WebApp) {
+                const webApp = window.Telegram.WebApp;
+
+                // Exemplo: acessar os dados do usuário
+                console.log("User:", webApp.initDataUnsafe.user);
+
+                // Exemplo: expandir o WebApp para tela cheia
+                webApp.expand();
+            } else {
+                console.error("❌ Telegram WebApp não está disponível.");
+            }
+        };
+    </script>
 
 
     <script type="module" src="js/front-end/walletConnect.js" defer></script>
