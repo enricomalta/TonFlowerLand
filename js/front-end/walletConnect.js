@@ -2,18 +2,43 @@ import { TonConnect } from 'https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+
 
 let tonConnect;
 
+window.onload = function() {
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+
+        // Agora você pode interagir com o Telegram WebApp com segurança
+        console.log("Telegram WebApp está pronto");
+
+        // Expande para tela cheia
+        tg.expand();
+
+        // Log do usuário para verificar as informações do usuário
+        console.log("User:", tg.initDataUnsafe.user);
+
+        // Adicionalmente, você pode verificar o tema e outras informações se necessário
+        console.log("Theme:", tg.themeParams);
+
+        // Agora, tente inicializar o TonConnect
+        if (typeof TonConnect !== 'undefined') {
+            console.log("TonConnect carregado:", TonConnect);
+            initializeTonConnect();
+        } else {
+            console.error("❌ TonConnect não foi carregado corretamente.");
+        }
+    } else {
+        console.error("❌ Telegram WebApp não está disponível.");
+    }
+};
+
+
 // Função para inicializar o TonConnect
 function initializeTonConnect() {
-    console.log("TonConnect foi carregado com sucesso!");
-
-    // Inicialize o TonConnect
-    tonConnect = new TonConnect({
+    const tonConnect = new TonConnect({
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
     });
 
     console.log("TonConnect inicializado:", tonConnect);
 }
-
 
 const API_URL = "https://ton-flower-land-back-end.vercel.app";
 const btnWalletConnect = document.getElementById("btnWalletConnect");
