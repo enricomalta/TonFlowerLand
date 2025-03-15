@@ -26,6 +26,7 @@ async function connectWallet() {
 
         // 2. Conectar à wallet
         const connectedWallet = await tonConnect.connect();
+        console.log(wallet); // Verifique o que está sendo retornado aqui
         
         // 3. Verificar se a carteira foi conectada corretamente
         if (!connectedWallet || !connectedWallet.account) {
