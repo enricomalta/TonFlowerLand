@@ -11,6 +11,11 @@ function initializeTonConnect() {
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
     });
 
+
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json', 
+    });
+
     console.log("TonConnect inicializado:", tonConnect);
 }
 
