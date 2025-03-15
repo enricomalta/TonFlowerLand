@@ -35,32 +35,42 @@ function isTelegramWebApp() {
 }
 
 async function connectWallet() {
-  try {
-    if (!tonConnect) {
-      console.error("❌ TonConnect não foi inicializado corretamente.");
-      return;
+    try {
+        // 0. Verificar se o TonConnect foi inicializado corretamente
+        if (!tonConnect) {
+            console.error("❌ TonConnect não foi inicializado corretamente.");
+            return;
+        }
+
+        // 1. Obtem a lista de wallets
+        tonConnect.getWallets().then(wallets => {
+            console.log("Carteiras disponíveis:", wallets);
+        });
+
+        console.log("🔗 Tentando conectar à Wallet...");
+
+        // 2. Conectar à wallet do telegram
+        const connectedWallet = await tonConnect.connect({ name: 'Wallet' });
+        console.log(connectedWallet); // Verifique o que está sendo retornado aqui
+        
+        // 3. Verificar se a carteira foi conectada corretamente
+        if (!connectedWallet || !connectedWallet.account) {
+            throw new Error("❌ A Wallet não retornou uma conta válida.");
+        }
+
+        console.log("✅ Carteira conectada com sucesso!");
+        console.log("📌 Endereço da Wallet:", connectedWallet.account.address);
+
+        // 4. Criar o usuário no backend com o endereço da wallet
+        await createUser(connectedWallet.account.address);
+
+        return connectedWallet.account.address; // Retornar o endereço da carteira
+
+    } catch (error) {
+        console.error("❌ Erro ao conectar a Wallet:", error.message);
+        return null; // Retornar null em caso de erro
     }
-    console.log("🔗 Tentando conectar à Wallet...");
-
-    // Força o uso da carteira do Telegram usando o nome "Wallet"
-    const connectedWallet = await tonConnect.connect({ name: 'Wallet' });
-    console.log("Wallet response:", connectedWallet);
-
-    if (!connectedWallet || !connectedWallet.account) {
-      throw new Error("❌ A Wallet não retornou uma conta válida.");
-    }
-
-    console.log("✅ Carteira conectada com sucesso!");
-    console.log("📌 Endereço da Wallet:", connectedWallet.account.address);
-
-    await createUser(connectedWallet.account.address);
-    return connectedWallet.account.address;
-  } catch (error) {
-    console.error("❌ Erro ao conectar a Wallet:", error.message);
-    return null;
-  }
 }
-
 
 
 async function signChallenge(walletAddress) {
