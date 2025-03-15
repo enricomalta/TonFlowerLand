@@ -15,40 +15,33 @@ function isTelegramWebApp() {
 
 async function connectWallet() {
     try {
-        const wallets = await tonConnect.getWallets();
-        console.log("Carteiras disponíveis:", wallets);
-
-        // 🔹 Caso esteja dentro do Telegram, conectar à Wallet do Telegram
-        if (isTelegramWebApp()) {
-            console.log("📲 Executando dentro do Telegram WebApp...");
-            
-            const telegramWallet = wallets.find(wallet => wallet.appName === "telegram-wallet");
-
-            if (!telegramWallet) {
-                throw new Error("A Wallet do Telegram não foi detectada.");
-            }
-
-            console.log("Tentando conectar à Wallet do Telegram...");
-            await tonConnect.connect({ name: "telegram-wallet" });
-
-            console.log("Carteira conectada com sucesso!");
+        // 1. Verificar se o TonConnect foi inicializado corretamente
+        if (!tonConnect) {
+            console.error("❌ TonConnect não foi inicializado corretamente.");
             return;
         }
 
-        // 🔹 Caso contrário, conecta a uma carteira normal (fora do Telegram)
-        const injectedWallet = wallets.find(wallet => wallet.injected);
+        console.log("🔗 Tentando conectar à Wallet...");
+
+        // 2. Conectar à wallet
+        const connectedWallet = await tonConnect.connect();
         
-        if (!injectedWallet) {
-            throw new Error("Nenhuma carteira injetada encontrada. Tente usar o QR Code.");
+        // 3. Verificar se a carteira foi conectada corretamente
+        if (!connectedWallet || !connectedWallet.account) {
+            throw new Error("❌ A Wallet não retornou uma conta válida.");
         }
 
-        console.log("Conectando à carteira:", injectedWallet.name);
-        await tonConnect.connect({ name: injectedWallet.appName });
+        // 4. Se a wallet foi conectada corretamente, logar informações de sucesso
+        console.log("✅ Carteira conectada com sucesso!");
+        console.log("📌 Endereço da Wallet:", connectedWallet.account.address);
 
-        console.log("Carteira conectada com sucesso!");
+        // 5. Aqui você pode chamar outras funções, como enviar dados ao servidor ou realizar ações
+        // Exemplo: Enviar a conta do usuário para o backend
+        await sendWalletAddressToBackend(connectedWallet.account.address);
+
     } catch (error) {
-        console.error("Erro ao conectar carteira:", error);
-        alert(error.message);
+        // 6. Captura de erros
+        console.error("❌ Erro ao conectar a Wallet:", error.message);
     }
 }
 
