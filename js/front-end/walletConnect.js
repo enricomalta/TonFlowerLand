@@ -1,7 +1,10 @@
 let tonConnect;
 
+// Função para inicializar o TonConnect
 function initializeTonConnect() {
     console.log("TonConnect foi carregado com sucesso!");
+
+    // Inicialize o TonConnect
     tonConnect = new TonConnect({
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
     });
@@ -12,6 +15,16 @@ function initializeTonConnect() {
 
 const API_URL = "https://ton-flower-land-back-end.vercel.app";
 const btnWalletConnect = document.getElementById("btnWalletConnect");
+
+// Garantir que a função de inicialização seja chamada após o carregamento completo do script
+window.onload = function() {
+    if (typeof TonConnect !== "undefined") {
+        initializeTonConnect();
+    } else {
+        console.error("TonConnect não foi carregado corretamente.");
+    }
+};
+
 
 console.log("TonConnect carregado:", tonConnect);
 
