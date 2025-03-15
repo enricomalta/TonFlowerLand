@@ -610,7 +610,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Wallet Connection
     async function handleWalletConnect() {
         walletConnect = true;
-        walletAddress = "";
+        walletAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e";
         web3AdressInput.value = walletAddress;
         firstLogin();
         fetchProfile();
