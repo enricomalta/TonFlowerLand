@@ -1027,7 +1027,7 @@ document.addEventListener("DOMContentLoaded", function () {
     attachVolumeListeners();
     loadVolumeSettings();
     
-    // handleWalletConnect();
+    handleWalletConnect();
 
 
 
