@@ -13,6 +13,30 @@
 
     <!-- CDNS -->
     <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@1.0.0/dist/tonconnect-sdk.min.js"></script>
+    
+    <script type="module">
+        // Garantir que o TonConnect esteja carregado antes de chamar a função de inicialização
+        window.onload = function() {
+            // Espera um pouco antes de tentar inicializar o TonConnect
+            setTimeout(function() {
+                if (typeof TonConnect !== "undefined") {
+                    console.log("TonConnect carregado:", TonConnect);
+                    initializeTonConnect(); // Inicialize quando o TonConnect estiver disponível
+                } else {
+                    console.error("TonConnect não foi carregado corretamente.");
+                }
+            }, 1000); // Espera 1 segundo
+        };
+    
+        function initializeTonConnect() {
+            console.log("TonConnect foi carregado com sucesso!");
+            // Inicialize o TonConnect corretamente aqui
+            const tonConnect = new TonConnect({
+                manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',
+            });
+        }
+    </script>
+    
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     
     <script type="module" src="js/front-end/index.js"></script>
