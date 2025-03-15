@@ -8,30 +8,50 @@ const tonConnect = new TonConnectSDK.TonConnect({
 
 console.log("TonConnect carregado:", tonConnect);
 
+function isTelegramWebApp() {
+    return window.Telegram && window.Telegram.WebApp;
+}
+
 
 async function connectWallet() {
     try {
-        // Conectar a carteira
         const wallets = await tonConnect.getWallets();
         console.log("Carteiras disponíveis:", wallets);
 
-        if (!wallets.length) {
-            alert("Nenhuma carteira disponível. Instale uma carteira TON.");
-            return null;
+        // 🔹 Caso esteja dentro do Telegram, conectar à Wallet do Telegram
+        if (isTelegramWebApp()) {
+            console.log("📲 Executando dentro do Telegram WebApp...");
+            
+            const telegramWallet = wallets.find(wallet => wallet.appName === "telegram-wallet");
+
+            if (!telegramWallet) {
+                throw new Error("A Wallet do Telegram não foi detectada.");
+            }
+
+            console.log("Tentando conectar à Wallet do Telegram...");
+            await tonConnect.connect({ name: "telegram-wallet" });
+
+            console.log("Carteira conectada com sucesso!");
+            return;
         }
 
-        // Conectar a primeira carteira disponível
-        await tonConnect.connect({ jsBridgeKey: wallets[0].jsBridgeKey });
+        // 🔹 Caso contrário, conecta a uma carteira normal (fora do Telegram)
+        const injectedWallet = wallets.find(wallet => wallet.injected);
+        
+        if (!injectedWallet) {
+            throw new Error("Nenhuma carteira injetada encontrada. Tente usar o QR Code.");
+        }
 
-        const walletInfo = await tonConnect.account;
-        console.log("Carteira conectada:", walletInfo);
-        return walletInfo.address;
+        console.log("Conectando à carteira:", injectedWallet.name);
+        await tonConnect.connect({ name: injectedWallet.appName });
+
+        console.log("Carteira conectada com sucesso!");
     } catch (error) {
         console.error("Erro ao conectar carteira:", error);
-        alert("Erro ao conectar carteira.");
-        return null;
+        alert(error.message);
     }
 }
+
 
 async function signChallenge(walletAddress) {
     try {
