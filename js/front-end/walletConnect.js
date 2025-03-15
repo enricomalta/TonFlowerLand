@@ -38,6 +38,7 @@ function initializeTonConnect() {
     });
 
     console.log("TonConnect inicializado:", tonConnect);
+    console.log("Inicializado");
 }
 
 const API_URL = "https://ton-flower-land-back-end.vercel.app";
