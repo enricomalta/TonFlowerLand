@@ -1,8 +1,8 @@
 {
-    "url": "http://192.168.0.100:5500",
+    "url": "https://ton-flower-land.vercel.app",
     "name": "TonFlower Land",
-    "iconUrl": "http://192.168.0.100:5500/img/logo.png",
-    "termsOfUseUrl": "http://192.168.0.100:5500/terms",
-    "privacyPolicyUrl": "http://192.168.0.100:5500/privacy"
+    "iconUrl": "https://ton-flower-land.vercel.app/img/logo.png",
+    "termsOfUseUrl": "https://ton-flower-land.vercel.app/terms",
+    "privacyPolicyUrl": "https://ton-flower-land.vercel.app/privacy"
   }
   
