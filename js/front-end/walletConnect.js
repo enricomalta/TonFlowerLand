@@ -8,16 +8,6 @@ const tonConnect = new TonConnectSDK.TonConnect({
 
 console.log("TonConnect carregado:", tonConnect);
 
-async function connectTelegramWallet() {
-    try {
-        console.log("Tentando conectar à Wallet do Telegram...");
-        await tonConnect.connect({ name: "telegram-wallet" });
-        console.log("✅ Conectado com sucesso!");
-    } catch (error) {
-        console.error("Erro ao conectar à Wallet do Telegram:", error);
-    }
-}
-
 
 async function connectWallet() {
     try {
@@ -98,7 +88,7 @@ async function verifySignature(walletAddress, signature) {
 
 async function loginWithTON() {
     try {
-        const walletAddress = await connectTelegramWallet();
+        const walletAddress = await connectWallet();
         if (!walletAddress) return;
 
         const signature = await signChallenge(walletAddress);
