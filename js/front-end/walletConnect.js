@@ -2,7 +2,7 @@ const API_URL = "https://ton-flower-land-back-end.vercel.app";
 const btnWalletConnect = document.getElementById("btnWalletConnect");
 
 
-const tonConnect = new TonConnect({
+const tonConnect = new TonConnectSDK.TonConnect({
     manifestUrl: "https://ton-flower-land.vercel.app/tonconnect-manifest.json",
 });
 
