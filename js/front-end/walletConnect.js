@@ -3,7 +3,7 @@ const btnWalletConnect = document.getElementById("btnWalletConnect");
 
 
 const tonConnect = new TonConnectSDK.TonConnect({
-    manifestUrl: "https://ton-flower-land.vercel.app/tonconnect-manifest.json",
+    manifestUrl: "https://ton-flower-land.vercel.app/tonconnect-manifest.json"
 });
 
 console.log("TonConnect carregado:", tonConnect);
