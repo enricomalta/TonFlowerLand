@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.0.100:3000";
+const API_URL = "https://ton-flower-land.vercel.app";
 const btnWalletConnect = document.getElementById("btnWalletConnect");
 
 
