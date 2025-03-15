@@ -1017,27 +1017,6 @@
 
     <script src="js/front-end/volume.js"></script>
     
-    <script type="module">
-        window.onload = function() {
-            if (window.Telegram && window.Telegram.WebApp) {
-                const tg = window.Telegram.WebApp;
-    
-                // Agora você pode interagir com o Telegram WebApp com segurança
-                console.log("Telegram WebApp está pronto");
-    
-                // Expande para tela cheia
-                tg.expand();
-    
-                // Log do usuário para verificar as informações do usuário
-                console.log("User:", tg.initDataUnsafe.user);
-    
-                // Adicionalmente, você pode verificar o tema e outras informações se necessário
-                console.log("Theme:", tg.themeParams);
-            } else {
-                console.error("❌ Telegram WebApp não está disponível.");
-            }
-        };
-    </script>
 
 
     <script type="module" src="js/front-end/walletConnect.js" defer></script>
