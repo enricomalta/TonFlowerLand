@@ -36,11 +36,16 @@ function isTelegramWebApp() {
 
 async function connectWallet() {
     try {
-        // 1. Verificar se o TonConnect foi inicializado corretamente
+        // 0. Verificar se o TonConnect foi inicializado corretamente
         if (!tonConnect) {
             console.error("❌ TonConnect não foi inicializado corretamente.");
             return;
         }
+
+        // 1. Obtem a lista de wallets
+        tonConnect.getWallets().then(wallets => {
+            console.log("Carteiras disponíveis:", wallets);
+        });
 
         console.log("🔗 Tentando conectar à Wallet...");
 
