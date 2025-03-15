@@ -32,16 +32,23 @@ async function connectWallet() {
         if (!connectedWallet || !connectedWallet.account) {
             throw new Error("❌ A Wallet não retornou uma conta válida.");
         }
-
-        // 4. Se a wallet foi conectada corretamente, logar informações de sucesso
+        
+        // 4. Verificar o Objeto wallet 
+        if (wallet && wallet.account && wallet.account.address) {
+            console.log("Carteira conectada:", wallet.account.address);
+        } else {
+            console.error("Erro: informações da carteira não encontradas.");
+        }
+    
+        // 5. Se a wallet foi conectada corretamente, logar informações de sucesso
         console.log("✅ Carteira conectada com sucesso!");
         console.log("📌 Endereço da Wallet:", connectedWallet.account.address);
 
-        // 5. Criar o usuário no backend com o endereço da wallet
+        // 6. Criar o usuário no backend com o endereço da wallet
         await createUser(connectedWallet.account.address);
 
     } catch (error) {
-        // 6. Captura de erros
+        // 7. Captura de erros
         console.error("❌ Erro ao conectar a Wallet:", error.message);
     }
 }
