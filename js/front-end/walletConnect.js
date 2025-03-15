@@ -35,9 +35,8 @@ async function connectWallet() {
         console.log("✅ Carteira conectada com sucesso!");
         console.log("📌 Endereço da Wallet:", connectedWallet.account.address);
 
-        // 5. Aqui você pode chamar outras funções, como enviar dados ao servidor ou realizar ações
-        // Exemplo: Enviar a conta do usuário para o backend
-        await sendWalletAddressToBackend(connectedWallet.account.address);
+        // 5. Criar o usuário no backend com o endereço da wallet
+        await createUser(connectedWallet.account.address);
 
     } catch (error) {
         // 6. Captura de erros
