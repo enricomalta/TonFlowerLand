@@ -1,4 +1,4 @@
-import { TonConnectUI } from 'https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+esm';
+import { TonConnect } from 'https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+esm';
 
 let tonConnect;
 
@@ -9,15 +9,6 @@ function initializeTonConnect() {
     // Inicialize o TonConnect
     tonConnect = new TonConnect({
         manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',  // Defina a URL do seu manifest
-        buttonRootId: '<btnWalletConnect>'
-    });
-
-    tonConnectUI.uiOptions = {
-      twaReturnUrl: 'https://web.telegram.org/a/#7509571811'
-    };
-    
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-        manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json', 
     });
 
     console.log("TonConnect inicializado:", tonConnect);
@@ -50,7 +41,7 @@ async function connectWallet() {
         console.log("🔗 Tentando conectar à Wallet...");
 
         // 2. Conectar à wallet do telegram
-        const connectedWallet = await tonConnectUI.connectWallet();
+        const connectedWallet = await tonConnect.connect({ name: 'MyTonWallet' });
         console.log(connectedWallet); // Verifique o que está sendo retornado aqui
         
         // 3. Verificar se a carteira foi conectada corretamente
