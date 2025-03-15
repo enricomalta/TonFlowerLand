@@ -1,4 +1,4 @@
-const API_URL = "https://ton-flower-land-back-end.vercel.app/";
+const API_URL = "https://ton-flower-land-back-end.vercel.app";
 const btnWalletConnect = document.getElementById("btnWalletConnect");
 
 
