@@ -354,23 +354,39 @@ export async function fetchItems() {
 
 // Player Request API
 export async function updatePlayerStatus(walletAddress) {
-    console.log('Update player status');
+    console.log("Update player status");
+
     try {
-        // Primeiramente tenta buscar o status do usuário
+        // Obtém o token armazenado (localStorage, sessionStorage ou cookies)
+        const token = localStorage.getItem("authToken");  // Ou outra forma de obter o token
+
+        if (!token) {
+            console.error("Token não encontrado. O usuário pode não estar autenticado.");
+            return null;
+        }
+
+        // Busca status do usuário na API
         const response = await fetch(`${API_URL}/user/${walletAddress}`, {
-            credentials: 'include' // Para enviar o cookie JWT
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`  // Adiciona o token JWT aqui
+            },
+            credentials: "include" // Envia cookies junto com a requisição (se necessário)
         });
 
         if (response.status === 404) {
-            // Se não encontrar o usuário, cria um novo
-            // console.log("Usuário não encontrado. Criando novo usuário...");
+            console.log("Usuário não encontrado. Criando novo usuário...");
+
+            // Se usuário não existir, cria um novo
             const createResponse = await fetch(`${API_URL}/createUser`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}` // Adiciona o token JWT aqui também
                 },
                 body: JSON.stringify({ walletAddress }),
-                credentials: 'include' // Para enviar o cookie JWT
+                credentials: "include"
             });
 
             if (!createResponse.ok) {
@@ -380,15 +396,19 @@ export async function updatePlayerStatus(walletAddress) {
             const data = await createResponse.json();
             return data.userData;  // Retorna os dados do novo usuário
         } else if (response.ok) {
-            // Se o usuário for encontrado, retorna os dados dele
+            // Se o usuário existir, retorna os dados dele
             const data = await response.json();
             return data;
+        } else {
+            console.error("Erro ao buscar status do jogador:", response.statusText);
+            return null;
         }
     } catch (error) {
         console.error("Erro ao buscar status do jogador:", error);
         return null;
     }
 }
+
 
 
 // Check o saldo/comprar API
