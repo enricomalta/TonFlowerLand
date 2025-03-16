@@ -2,7 +2,7 @@ import { TonConnect } from 'https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+
 import { items, onSlotClick, updatePlayerStatus, fetchItems, plantSeed, colectSeed } from './api.js';
 
 // const API_URL = "http://192.168.0.100:3000"; Debug
-const API_URL = "https://ton-flower-land.vercel.app"; // Prod
+const API_URL = "https://ton-flower-land-back-end.vercel.app/"; // Prod
 let tonConnect;
 let selectPlant = false; // Armazena a planta selecionada
 let selectedVaseSlot = null; // Armazena o slot do vaso onde o jogador quer plantar
