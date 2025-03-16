@@ -1,5 +1,5 @@
 // const API_URL = "https://ton-flower-land-back-end.vercel.app"; // URL do seu back-end
-const API_URL = "http://192.168.0.100:3000"
+const API_URL = "https://ton-flower-land-back-end.vercel.app/"
 let isProcessing = false; // Variável de controle para evitar múltiplos cliques rápidos
 export let items = []; // Inicializando o array de itens
 
