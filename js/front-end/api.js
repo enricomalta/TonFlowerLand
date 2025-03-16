@@ -357,22 +357,10 @@ export async function updatePlayerStatus(walletAddress) {
     console.log("Update player status");
 
     try {
-        // Obtém o token armazenado (localStorage, sessionStorage ou cookies)
-        const token = localStorage.getItem("authToken");  // Ou outra forma de obter o token
-
-        if (!token) {
-            console.error("Token não encontrado. O usuário pode não estar autenticado.");
-            return null;
-        }
-
         // Busca status do usuário na API
         const response = await fetch(`${API_URL}/user/${walletAddress}`, {
             method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`  // Adiciona o token JWT aqui
-            },
-            credentials: "include" // Envia cookies junto com a requisição (se necessário)
+            credentials: "include" // Envia automaticamente os cookies HTTP-only
         });
 
         if (response.status === 404) {
@@ -382,11 +370,10 @@ export async function updatePlayerStatus(walletAddress) {
             const createResponse = await fetch(`${API_URL}/createUser`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}` // Adiciona o token JWT aqui também
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ walletAddress }),
-                credentials: "include"
+                credentials: "include" // Envia os cookies também
             });
 
             if (!createResponse.ok) {
@@ -408,6 +395,7 @@ export async function updatePlayerStatus(walletAddress) {
         return null;
     }
 }
+
 
 
 
