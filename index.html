@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--     <meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self' https://web.telegram.org https://t.me;"> -->
     <link rel="stylesheet" href="css/index.css"> 
     
     <audio id="musicAudio" src="sounds/musicTheme.mp3" autoplay loop></audio>
@@ -11,21 +10,9 @@
     <audio id="fxAudio" src="sounds/recolher.mp3"></audio>
     <audio id="cursorAudio" src="sounds/cursor1.mp3"></audio>
 
-    <!-- CDNS -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+esm"></script>
-    
-    
-    <script type="module" src="https://telegram.org/js/telegram-web-app.js"></script>
-
-
-    
+    <!-- <script type="module" src="js/front-end/walletConnect.js"></script> -->
     <script type="module" src="js/front-end/index.js"></script>
-    <script src="js/front-end/api.js"></script>
-
-
-    
-    <!-- <script type="module" src="js/front-end/pegaTrouxa.js"></script> -->
-    
+    <script type="module" src="js/front-end/api.js"></script>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <title>Tonflower Land</title>
@@ -41,7 +28,7 @@
 
 
             <!-- Display UI Contadores -->
-            <div class="top row" id="top">
+            <div class="top none row" id="top">
 
 
                 <div class="coins wd-100p column">
@@ -1016,27 +1003,16 @@
     </div>
 
     <script src="js/front-end/volume.js"></script>
+    <!-- <script type="module" src="js/front-end/pegaTrouxa.js"></script> -->
 
+
+    <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
-        window.onload = function() {
-            if (window.Telegram && window.Telegram.WebApp) {
-                const webApp = window.Telegram.WebApp;
-
-                // Exemplo: acessar os dados do usuário
-                console.log("User:", webApp.initDataUnsafe.user);
-
-                // Exemplo: expandir o WebApp para tela cheia
-                webApp.expand();
-            } else {
-                console.error("❌ Telegram WebApp não está disponível.");
-            }
-        };
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Expande para tela cheia
+    
+        // console.log("User:", tg.initDataUnsafe.user);
     </script>
-
-
-    <script type="module" src="js/front-end/walletConnect.js" defer></script>
-
-
-
 </body>
 </html>
