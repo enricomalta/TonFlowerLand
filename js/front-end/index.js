@@ -185,6 +185,7 @@ async function connectWallet() {
         const walletAddress = connectResult.account.address;
         localStorage.setItem('walletAddress', walletAddress);
         window.walletAddress = walletAddress;
+        localStorage.setItem("jwt", token);
         console.log("Endereço Global", window.walletAddress);
         updateUIForConnectedWallet(connectResult);
         return walletAddress;
