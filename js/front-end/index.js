@@ -1691,33 +1691,11 @@ async function aplicarUtilitario(utilitario) {
 
 
 
-
-
-
 //#endregion
 
 
 
-//#region Button Events
-btnConfigOpen.addEventListener("click", configOpen);
-// Button Shop Menu Mode
-btnShopOpen.addEventListener("click", shopOpen);
-// Button Shop Store
-btnShopMenu.addEventListener("click", shopMenuOpen);
-// Button Play Mode
-btnPlayMenu.addEventListener("click", playMenuOpen);
-// Button Inventory
-btnInventoryOpen.addEventListener("click", inventoryOpen);
 
-// Utilitarios Menu Inventory
-menuInventory2.addEventListener("click", mostrarInventarioUtilitarios);
-// Button Play Game Mode
-btnPlayOpen.addEventListener("click", playOpen);
-// Button Exchange/Trade
-btnTradeOpen.addEventListener("click", tradeOpen);
-// Disconnect Wallet
-btnWalletDisconnect.addEventListener("click", logout);
-//#endregion
 
 // Main Structure Starts --------------------------------
 startMusic();
@@ -1728,6 +1706,26 @@ plantVaso();
 // Aguardar o carregamento do DOM para inicializar a funcionalidade
 document.addEventListener('DOMContentLoaded', () => {
     const btnWalletConnect = document.getElementById("btnWalletConnect");
+    //#region Button Events
+    btnConfigOpen.addEventListener("click", configOpen);
+    // Button Shop Menu Mode
+    btnShopOpen.addEventListener("click", shopOpen);
+    // Button Shop Store
+    btnShopMenu.addEventListener("click", shopMenuOpen);
+    // Button Play Mode
+    btnPlayMenu.addEventListener("click", playMenuOpen);
+    // Button Inventory
+    btnInventoryOpen.addEventListener("click", inventoryOpen);
+
+    // Utilitarios Menu Inventory
+    menuInventory2.addEventListener("click", mostrarInventarioUtilitarios);
+    // Button Play Game Mode
+    btnPlayOpen.addEventListener("click", playOpen);
+    // Button Exchange/Trade
+    btnTradeOpen.addEventListener("click", tradeOpen);
+    // Disconnect Wallet
+    btnWalletDisconnect.addEventListener("click", logout);
+    //#endregion
     if (btnWalletConnect) {
         btnWalletConnect.addEventListener("click", loginWithTON);
         initApp();
