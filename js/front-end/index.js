@@ -7,6 +7,7 @@ const API_URL = "https://ton-flower-land-back-end.vercel.app"; // URL do seu bac
 let tonConnect;
 let selectPlant = false; // Armazena a planta selecionada
 let selectedVaseSlot = null; // Armazena o slot do vaso onde o jogador quer plantar
+let selectedPlantSlot = null; // Armazena o slot da planta que o jogador quer inspecionar
 let walletAddress; // Armazena a wallet adress
 const activeIntervals = {}; // Temporazidores
 const activePlantIntervals = {}; // Planta Update UI/Crescimento
