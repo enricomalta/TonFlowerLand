@@ -1,13 +1,12 @@
 import { TonConnect } from 'https://cdn.jsdelivr.net/npm/@tonconnect/sdk@3.0.7/+esm';
-import { items, onSlotClick, updatePlayerStatus, fetchItems, plantSeed, colectSeed } from './api.js';
+import { items, onSlotClick, updatePlayerStatus, fetchItems, plantSeed, colectSeed, updatePlantStatus, applyUtilityToPlant } from './api.js';
 
-// const API_URL = "http://192.168.0.100:3000"; Debug
-const API_URL = "https://ton-flower-land-back-end.vercel.app"; // Prod
+// const API_URL = "http://192.168.0.100:3000";
+const API_URL = "https://ton-flower-land-back-end.vercel.app"; // URL do seu back-end
+
 let tonConnect;
 let selectPlant = false; // Armazena a planta selecionada
 let selectedVaseSlot = null; // Armazena o slot do vaso onde o jogador quer plantar
-let selectedPlantSlot = null; // Armazena o slot da planta onde jogador quer inspecionar
-let showSpecialItems = false; // Mostra utilizarios ao clicar no vaso plantado
 let walletAddress; // Armazena a wallet adress
 const activeIntervals = {}; // Temporazidores
 const activePlantIntervals = {}; // Planta Update UI/Crescimento
@@ -15,38 +14,32 @@ const activePlantIntervals = {}; // Planta Update UI/Crescimento
 //#region ID Elements
 const walletModal = document.getElementById("walletModal");
 const playModal = document.getElementById("playModal");
+const top = document.getElementById("top");
+const down = document.getElementById("down");
+const middle = document.getElementById("middle");
+
 const btnShopOpen = document.getElementById("btnShopOpen");
 const btnShopMenu = document.getElementById("btnShopMenu");
 const btnPlayMenu = document.getElementById("btnPlayMenu");
 const btnInventoryOpen = document.getElementById("btnInventoryOpen");
+const menuInventory2 = document.getElementById("menuInventory2");
 const btnTradeOpen = document.getElementById("btnTradeOpen");
 const btnConfigOpen = document.getElementById("btnConfigOpen");
 const btnPlayOpen = document.getElementById("btnPlayOpen");
 const btnWalletDisconnect = document.getElementById("btnWalletDisconnect");
-const top = document.getElementById("top");
-const down = document.getElementById("down");
-const middle = document.getElementById("middle");
 const input = document.querySelector(".coinNumber input");
 //#endregion
 
 
-
-
-
-
-
-
-
-
-
-// WEB3
+//#region WEB3
 
 
 // Inicializa o TonConnect
 async function initializeTonConnect() {
+    isTelegramWebApp();
     checkExistingSession();
     try {
-        console.log("Inicializando TonConnect...");
+        // console.log("Inicializando TonConnect...");
 
         tonConnect = new TonConnect({
             manifestUrl: 'https://ton-flower-land.vercel.app/tonconnect-manifest.json',
@@ -57,14 +50,14 @@ async function initializeTonConnect() {
             }
         });
 
-        console.log("TonConnect inicializado:", tonConnect);
+        // console.log("TonConnect inicializado:", tonConnect);
         // Configura o listener para mudanças de status da wallet
         tonConnect.onStatusChange(wallet => {
             if (wallet) {
-                console.log("✅ Status da wallet mudou - Conectada:", wallet);
+                // console.log("✅ Status da wallet mudou - Conectada:", wallet);
                 handleWalletConnected(wallet);
             } else {
-                console.log("❌ Status da wallet mudou - Desconectada");
+                // console.log("❌ Status da wallet mudou - Desconectada");
             }
         });
 
@@ -86,7 +79,7 @@ async function checkExistingSession() {
 
         if (response.ok) {
             const userData = await response.json();
-            console.log("Sessão existente encontrada:", userData);
+            // console.log("Sessão existente encontrada:", userData);
             
             // Preencher o campo de endereço
             const web3AdressInput = document.getElementById("adressInput");
@@ -100,7 +93,7 @@ async function checkExistingSession() {
             // Carregar os dados do perfil
             await fetchProfile(userData.walletAddress);
             await updateUIAndInventory(userData.walletAddress);
-            console.log(userData.walletAddress);
+            // console.log(userData.walletAddress);
             return true; // Sessão válida
         }
         
@@ -177,7 +170,7 @@ async function connectWallet() {
 
         if (typeof connectResult === 'string' && connectResult.startsWith('http')) {
             localStorage.setItem('connectingWallet', 'true');
-            localStorage.setItem('walletAddress', connectResult); 
+            // localStorage.setItem('walletAddress', connectResult); 
             window.open(connectResult, '_blank');
             return null; // Retorna null até o usuário voltar da conexão
         }
@@ -188,16 +181,19 @@ async function connectWallet() {
 
         console.log("✅ Carteira conectada com sucesso!");
         // Armazena o endereço globalmente
-        window.walletAddress = connectResult.account.address;
-        console.log("Endereço Global",window.walletAddress);
+        const walletAddress = connectResult.account.address;
+        localStorage.setItem('walletAddress', walletAddress);
+        window.walletAddress = walletAddress;
+        console.log("Endereço Global", window.walletAddress);
         updateUIForConnectedWallet(connectResult);
-        return connectResult.account.address;
+        return walletAddress;
     } catch (error) {
         console.error("❌ Erro ao conectar a Wallet:", error);
         return null;
     }
 }
 
+// Desloga
 async function logout() {
     try {
 
@@ -208,6 +204,7 @@ async function logout() {
         
         // Limpar o token do localStorage
         localStorage.removeItem("authToken");
+        localStorage.removeItem("walletAddress");
         
         // Chamar endpoint para limpar o cookie
         await fetch(`${API_URL}/logout`, {
@@ -222,37 +219,6 @@ async function logout() {
         console.log("Logout realizado com sucesso");
     } catch (error) {
         console.error("Erro ao fazer logout:", error);
-    }
-}
-
-
-
-// Wallet Connection
-async function handleWalletConnect(address) {
-    walletConnect = true; // Marca que a wallet foi conectada
-    walletAddress = address || ""; // Recebe o endereço da wallet
-
-
-    // Outros processos como o login e inicialização de perfil podem ser feitos depois
-    try {
-        console.log("Login com a wallet:", walletAddress);
-
-        const userProfile = await fetchProfile(walletAddress);  // Carrega o perfil do usuário
-        if (userProfile) {
-            addSlotClickListeners(walletAddress);
-            await updateVasoAndPlantImages(walletAddress);
-            playOpen();
-            const userData = await updatePlayerStatus(walletAddress);
-            if (userData) {
-                await updateUIAndInventory();
-            } else {
-                console.error("Erro: Dados do jogador não foram carregados corretamente.");
-            }
-        } else {
-            console.error("Erro ao buscar perfil do usuário.");
-        }
-    } catch (error) {
-        console.error("Erro ao processar login:", error);
     }
 }
 
@@ -301,9 +267,9 @@ async function handleWalletConnected(wallet) {
         }
         
         // Agora que o usuário existe, buscar os dados atualizados
-        console.log("Buscando dados do usuário...");
+        // console.log("Buscando dados do usuário...");
         const userData = await updatePlayerStatus(walletAddress);
-        console.log("Dados do usuário recebidos:", userData);
+        // console.log("Dados do usuário recebidos:", userData);
         
         if (!userData) {
             console.error("Erro: Dados do jogador não foram carregados corretamente.");
@@ -311,7 +277,7 @@ async function handleWalletConnected(wallet) {
         }
 
 
-        console.log("Login com a wallet:", walletAddress);
+        // console.log("Login com a wallet:", walletAddress);
         const userProfile = await fetchProfile(walletAddress);  // Carrega o perfil do usuário
         if (userProfile) {
             addSlotClickListeners(walletAddress);
@@ -349,7 +315,7 @@ async function handleWalletConnected(wallet) {
         // Configurar renovação do token
         setupTokenRenewal();
         
-        console.log("Conexão da wallet processada com sucesso!");
+        // console.log("Conexão da wallet processada com sucesso!");
         
     } catch (error) {
         console.error("Erro ao processar o login:", error);
@@ -385,7 +351,7 @@ async function login(walletAddress) {
     }
 }
 
-
+// Valida Usuario
 async function fetchProfile(walletAddress) {
     try {
         const response = await fetch(`${API_URL}/user/${walletAddress}`, {
@@ -398,7 +364,7 @@ async function fetchProfile(walletAddress) {
         }
 
         const profileData = await response.json();
-        console.log("Dados do perfil:", profileData);
+        // console.log("Dados do perfil:", profileData);
         
         // Atualizar UI com os dados do perfil
         // updateProfileUI(profileData);
@@ -513,11 +479,11 @@ async function initApp() {
         if (!hasSession) {
             // Se não tiver sessão, inicializar o TonConnect normalmente
             await initializeTonConnect();
-            console.log("🔗 Tentando conectar à Wallet...");
+            // console.log("🔗 Tentando conectar à Wallet...");
             
             // Listar wallets disponíveis
             const wallets = await getWallets();
-            console.log("Wallets disponíveis:", wallets);
+            // console.log("Wallets disponíveis:", wallets);
             
             // Aqui você pode mostrar uma mensagem ou botão para o usuário conectar a wallet
             updateUIForDisconnectedWallet();
@@ -526,7 +492,7 @@ async function initApp() {
             // Se já tem sessão, ainda precisamos inicializar o TonConnect para outras operações
             // mas não precisamos pedir ao usuário para conectar novamente
             await initializeTonConnect();
-            console.log("Sessão existente encontrada, não é necessário conectar wallet novamente");
+            // console.log("Sessão existente encontrada, não é necessário conectar wallet novamente");
             
             // Recuperar o endereço da wallet da sessão
             const userData = await fetch(`${API_URL}/session/check`, {
@@ -536,7 +502,7 @@ async function initApp() {
             
             if (userData && userData.walletAddress) {
                 window.walletAddress = userData.walletAddress;
-                console.log("Endereço da wallet recuperado da sessão:", window.walletAddress);
+                // console.log("Endereço da wallet recuperado da sessão:", window.walletAddress);
             }
         }
         
@@ -547,32 +513,10 @@ async function initApp() {
     }
 }
 
+//#endregion
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// UI UPDATE
+//#region UI UPDATE
 
 
 
@@ -589,7 +533,7 @@ async function updateUIAndInventory(walletAddress) {
     };
     
     try {
-        // Tenta usar o parâmetro ou recorrer ao valor global
+        // 0. Tenta usar o parâmetro ou recorrer ao valor global
         const addressToUse = walletAddress || window.walletAddress;
         if (!addressToUse) {
             console.error("Endereço da wallet não encontrado.");
@@ -683,6 +627,7 @@ async function updateUIAndInventory(walletAddress) {
                 window.quantityVasos = quantityVasos; // Salva globalmente para uso em outras funções
             } else if (itemNome === "Estrela") {
                 quantityStar = parseInt(quantidade) || 0;  // Armazena a quantidade de estrelas
+                window.quantityStar = quantityStar;
             }
             if (element) {
                 // Se for "Vaso" ou "Estrela", adiciona "/100", caso contrário, só exibe a quantidade
@@ -743,7 +688,7 @@ async function updateUIAndInventory(walletAddress) {
         return null;
     }
 }
-// Atualizar Slots Vasos com base na quantidade de vasos do jogaor
+// Atualizar dinamicamente a quantidade de paginas com base no numero de vasos do jogaor
 function updatePlayBoard(quantityVasos) {
     const boardContainer = document.getElementById("gameBoardFarm");
     boardContainer.innerHTML = ""; // Limpa os slots existentes
@@ -830,7 +775,7 @@ function updatePlayBoard(quantityVasos) {
 // Atualiza contador e seta foto da planta
 async function updateVasosUI(userData) {
     try {
-        
+        const walletAddress = userData.walletAddress || userData.wallet;
         
         const plantTimes = userData.plantTime;
         if (!Array.isArray(plantTimes) || plantTimes.length === 0) {
@@ -844,39 +789,73 @@ async function updateVasosUI(userData) {
         }
         
         // Função para atualizar o contador e adicionar o evento de clique
-        const updatePlantCounter = (slotID, harvestTimestamp) => {
+
+        const updatePlantCounter = (slotID, plant) => {
             const plantTimerElement = document.getElementById(`plantTimer${slotID}`);
             if (!plantTimerElement) return;
-            
+
             // Remove event listener anterior (evita duplicação)
             plantTimerElement.onclick = null;
+
+            // Pega os valores corretos dentro de growthStatus
+            const isWater = plant.growthStatus?.isWatered;
+            const isProtect = plant.growthStatus?.isProtected;
+            const isFertilized = plant.growthStatus?.isFertilized;
+            const isParasita = plant.growthStatus?.isParasita;
+            const harvestDate = plant.harvestDate;
+
+            // Pega o timestamp da data de colheita
+            const harvestTimestamp = (harvestDate._seconds * 1000) + (harvestDate._nanoseconds / 1000000);
             
+            const currentTimestamp = Date.now();
+
             // Adiciona evento de clique para verificar a colheita
             plantTimerElement.addEventListener("click", async () => {
-                const currentTimestamp = Date.now();
-                if (currentTimestamp >= harvestTimestamp) {
+                if (isWater && !isParasita && currentTimestamp >= harvestTimestamp) {
                     console.log(`Slot ${slotID} pronto! Coletando...`);
+
+                    if (!walletAddress) {
+                        console.error("Erro: walletAddress não disponível. Usuário precisa estar logado.");
+                        return;
+                    }
+
                     try {
-                        verifyAndCollectSeed(walletAddress, slotID);
-                        console.log("Resultado da colheita:", walletAddress);
+                        await verifyAndCollectSeed(walletAddress, slotID);
                         plantTimerElement.innerText = "Colhido!";
-                        clearInterval(activeIntervals[slotID]); // Para o contador
-                        delete activeIntervals[slotID]; // Remove o intervalo da lista
+                        clearInterval(activeIntervals[slotID]);
+                        delete activeIntervals[slotID];
                     } catch (error) {
                         console.error("Erro ao coletar planta:", error);
                     }
                 } else {
-                    console.warn(`Slot ${slotID} ainda não está pronto para colher.`);
+                    if (!isWater) {
+                        console.warn(`Slot ${slotID} precisa ser regado para começar a crescer.`);
+                    } else if (isParasita) {
+                        console.warn(`Slot ${slotID} está com Parasitas. Remova para continuar o crescimento.`);
+                    } else {
+                        console.warn(`Slot ${slotID} ainda não está pronto para colher.`);
+                    }
                 }
             });
-            
+
             // Se já existir um contador para esse slot, limpa antes de criar um novo
             if (activeIntervals[slotID]) {
                 clearInterval(activeIntervals[slotID]);
             }
-            
+
             activeIntervals[slotID] = setInterval(() => {
                 const currentTimestamp = Date.now();
+
+                if (!isWater) {
+                    plantTimerElement.innerText = "Precisa de água";
+                    return;
+                }
+
+                if (isParasita) {
+                    plantTimerElement.innerText = "Vaso com parasitas";
+                    return;
+                }
+
                 const timeRemaining = harvestTimestamp - currentTimestamp;
                 if (timeRemaining <= 0) {
                     plantTimerElement.innerText = "Pronto para Colher";
@@ -897,18 +876,15 @@ async function updateVasosUI(userData) {
             }, 1000);
         };
 
+
         for (const plant of plantTimes) {
-            const { slotID, itemNome, harvestDate, itemId, raridade } = plant;
+            const { slotID, itemNome, itemId, raridade } = plant;
             if (!itemId) {
                 console.warn(`itemId não encontrado para a planta no slot ${slotID}.`);
                 continue;
             }
             
-            const harvestTimestamp = (harvestDate._seconds * 1000) + (harvestDate._nanoseconds / 1000000);
-            const plantTimerElement = document.getElementById(`plantTimer${slotID}`);
-            if (plantTimerElement) {
-                updatePlantCounter(slotID, harvestTimestamp);
-            }
+            updatePlantCounter(slotID, plant);
             
             const plantNameElement = document.getElementById(`plantName${slotID}`);
             if (plantNameElement) {
@@ -982,24 +958,28 @@ const updateVasoAndPlantImages = async (walletAddress) => {
         // Função que verifica e atualiza o progresso da planta
         const updateProgress = () => {
             const currentTimestamp = Date.now();
-            const timeElapsed = currentTimestamp - plantTimestamp;
+            const lastUpdatedTimestamp = (plant.growthStatus?.lastUpdated?._seconds || 0) * 1000; // Última atualização
+            const savedElapsedTime = (plant.growthStatus?.elapsedTime || 0) * 1000; // Tempo salvo
+            const timeSinceLastUpdate = currentTimestamp - lastUpdatedTimestamp; // Tempo real decorrido desde a última atualização
+            
+            // Tempo total decorrido até agora
+            const timeElapsed = savedElapsedTime + timeSinceLastUpdate;
             const timeRemaining = harvestTimestamp - currentTimestamp;
             const progress = timeElapsed / totalDuration;
             const spriteInicial = 0.10;
             const spriteFinal = 0.50;
             const vasoPhotoElement = document.getElementById(`vasoPhoto${slotID}`);
             const plantPhotoElement = document.getElementById(`plantPhoto${slotID}`);
-            
+        
             if (!vasoPhotoElement || !plantPhotoElement) {
                 console.warn(`Elementos do slot ${slotID} não encontrados.`);
                 return;
             }
-            
+        
             if (timeRemaining <= 0) {
                 // Planta completamente crescida
                 vasoPhotoElement.src = isFertilized ? "/img/play/002.png" : "/img/play/02.png";
                 plantPhotoElement.style.display = "block";
-                // Limpa o intervalo para evitar execuções desnecessárias
                 clearInterval(activePlantIntervals[slotID]);
                 delete activePlantIntervals[slotID];
             } else {
@@ -1016,6 +996,8 @@ const updateVasoAndPlantImages = async (walletAddress) => {
             }
         };
         
+        
+        
         // Atualiza imediatamente e depois a cada segundo
         updateProgress();
         activePlantIntervals[slotID] = setInterval(updateProgress, 1000);
@@ -1027,16 +1009,14 @@ function updateUIForConnectedWallet(wallet) {
     const down = document.getElementById("down");
     const middle = document.getElementById("middle");
     const walletModal = document.getElementById("walletModal");
-    const playModal = document.getElementById("playModal");
-    const playGameBoard = document.getElementById("playGameBoard");
 
     top.style.display = "flex";
     down.style.display = "flex";
     walletModal.style.display = "none";
     middle.style.height = "100%";
     walletModal.style.height = "559px";
-    playModal.style.display = "flex";
-    playGameBoard.style.display = "flex";
+    playOpen();
+    // inventoryOpen(); // debug inventario
 }
 // Atualiza a UI quando a wallet está desconectada
 function updateUIForDisconnectedWallet() {
@@ -1053,52 +1033,29 @@ function updateUIForDisconnectedWallet() {
     walletModal.style.height = "650px";
     playModal.style.display = "flex";
 }
-// Filtra utilirarios ao clicar no vaso depois de ter colocado a semente
-function filterInventoryItems() {
-    const allSlots = document.querySelectorAll(".playInvetorySlot");
-
-    if (allSlots.length === 0) {
-        console.error("Nenhum item encontrado no inventário!");
-        return;
-    }
-
-    // Definição dos itens especiais (Regador, Fertilizante, Anti-Parasita)
-    const specialItems = ["Regador", "Fertilizante", "Anti-Parasita"];
-
-    allSlots.forEach(slot => {
-        const slotId = slot.id.replace("playInvetorySlot", "");
-        const itemTitleElement = document.querySelector(`#titleInvetorySlot${slotId}`);
-
-        if (!itemTitleElement) return;
-
-        const itemName = itemTitleElement.textContent.trim();
-
-        // Se estiver abrindo pelo vaso, exibe plantas + especiais
-        if (showSpecialItems) {
-            const isSpecialItem = specialItems.includes(itemName);
-            slot.style.display = "flex"; // Exibe todos os itens ao abrir pelo vaso
-        } else {
-            // Se estiver abrindo pelo menu, exibe apenas plantas (ocultando especiais)
-            const isSpecialItem = specialItems.includes(itemName);
-            slot.style.display = isSpecialItem ? "none" : "flex"; // Oculta itens especiais no menu de sementes
-        }
-    });
-}
 // Função para verificar a coletar da planta
 async function verifyAndCollectSeed(walletAddress, slotID) {
     try {
         console.log(`Verificando se a planta do slot ${slotID} pode ser colhida...`);
 
-        
-        // Obtém os dados do jogador corretamente antes de chamar updatePlayerStatus
-        const userData = await updatePlayerStatus(walletAddress);
-
-        if (!userData || !userData.walletAddress) {
-            console.error("Erro: walletAddress não encontrado!");
+        if (!walletAddress) {
+            console.error("Erro: walletAddress não fornecido na chamada da função!");
             return;
         }
 
-        window.userData = walletAddress;
+        // Armazene o walletAddress em uma constante para garantir que não mude
+        const userWallet = walletAddress;
+        
+        // Obtém os dados do jogador
+        const userData = await updatePlayerStatus(userWallet);
+
+        if (!userData || !userData.walletAddress) {
+            console.error("Erro: dados do usuário não encontrados!");
+            return;
+        }
+
+        // Armazena o objeto userData completo
+        window.userData = userData;
 
 
         // Busca os dados da planta novamente para garantir que pode ser colhida
@@ -1111,6 +1068,9 @@ async function verifyAndCollectSeed(walletAddress, slotID) {
         }
 
         console.log(`Slot ${slotID} pronto! Coletando...`);
+
+        console.log("walletAddress antes de chamar colectSeed:", walletAddress);
+        console.log("Tipo de walletAddress:", typeof walletAddress);
 
         // Chama a API de coleta
         const data = await colectSeed(walletAddress, slotID);
@@ -1149,6 +1109,7 @@ input.addEventListener("input", function () {
     input.value = new Intl.NumberFormat("pt-BR").format(value);
 });
 
+//#endregion
 
 
 //#region Modal Funcion //
@@ -1221,7 +1182,7 @@ function closeAllModals() {
         });
 }
 // Abre modal play
-function playOpen() {
+export function playOpen() {
     closeAllModals();
     document.getElementById("playModal").style.display = "flex";
     document.getElementById("playGameBoard").style.display = "flex";
@@ -1231,6 +1192,7 @@ function playOpen() {
 function inventoryOpen() {
     selectPlant = false;
     closeAllModals();
+    document.getElementById("menuInventory2").style.display = "none";
     document.getElementById("playInvetory").style.display = "flex";
     document.getElementById("playModal").style.display = "flex";
     document.getElementById("playInvetoryContent").style.display = "flex";
@@ -1241,13 +1203,6 @@ function inventoryOpen() {
         slot.classList.remove("pointer");
     });
     updateUIAndInventory(walletAddress);
-
-    // Se o inventário NÃO foi aberto pelo vaso, resetar filtro
-    if (!showSpecialItems) {
-        showSpecialItems = false;
-    }
-
-    filterInventoryItems(); // Aplica a lógica de exibição dos itens
 }
 // Função para atualizar a exibição das linhas
 function updateDisplay(rows, arrowLast, arrowNext, currentPage, totalPages, itemsPerPage) {
@@ -1332,9 +1287,43 @@ function setupPagination(modalId, arrowNextId, arrowLastId, rowClass, itemsPerPa
     // Inicializa a exibição do modal
     initializePagination();
 }
-// Evento para abrir o inventário ao clicar no vaso
+//Função para fechar o modal
+function fecharModal() {
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("modalInformation").style.display = "none";
+    document.getElementById("modalInformationInspect").style.display = "none";
+}
+// Evento click slot/shop walletAddress
+function addSlotClickListeners(walletAddress) {
+    // Verifica se walletAddress é válido
+    if (!walletAddress || typeof walletAddress !== 'string') {
+        console.error("Erro: walletAddress inválido:", walletAddress);
+        return;
+    }
+
+    for (let i = 1; i <= 22; i++) {
+        const slotElement = document.getElementById(`shopSlot${i}`);
+        if (slotElement) {
+            if (!slotElement.dataset.listenerAdded) {
+                // Cria um closure para garantir que walletAddress será preservado
+                const walletAddressCopy = walletAddress;
+                slotElement.addEventListener('click', () => onSlotClick(i, walletAddressCopy));
+                slotElement.dataset.listenerAdded = "true";
+            }
+        } else {
+            console.warn(`Elemento shopSlot${i} não encontrado`);
+        }
+    }
+}
+//#endregion
+
+
+//#region Plant Functions
+
+// Evento para mouse click vaso/planta
 function attachSlotClickEvents(quantityVasos) {
     document.querySelectorAll(".slotVasos").forEach(slot => {
+        const menuInventory2 = document.getElementById("menuInventory2");
         const slotIndex = parseInt(slot.id.replace("slotVasos", ""), 10);
         const vasoPhoto = slot.querySelector(".vasoPhoto");
         const plantPhoto = slot.querySelector(".plantPhoto");
@@ -1348,9 +1337,8 @@ function attachSlotClickEvents(quantityVasos) {
                 vasoPhoto.addEventListener("click", () => {
                     selectedVaseSlot = slotIndex;
 
-                    showSpecialItems = true; // Ativar filtro de itens especiais APENAS quando clicar no vaso
                     inventoryOpen(); // Abre o inventário
-
+                    menuInventory2.style.display = "flex";
                     selectPlant = true;
                     document.querySelectorAll(".playInvetorySlot").forEach(slot => slot.classList.toggle("pointer", selectPlant));
                     selectPlant = false;
@@ -1391,6 +1379,7 @@ function attachSlotClickEvents(quantityVasos) {
                 }
 
                 const plantData = window.userData.items.find(plant => plant.itemId === plantId);
+                const plantTime = window.userData.plantTime.find(plant => plant.itemId === plantId);
 
                 if (!plantData) {
                     console.error("Planta não encontrada no banco de dados!");
@@ -1403,6 +1392,9 @@ function attachSlotClickEvents(quantityVasos) {
                         LvL Raridade: ${plantData.raridade} 🌟
                         Pagamento: ${plantData.itemPay} 💰
                         Tempo: ${plantData.itemTime} ⏳
+                        Protegido: ${plantTime?.growthStatus?.isProtected ? "Sim" : "Não"} 🔒
+                        Regado: ${plantTime?.growthStatus?.isWatered ? "Sim" : "Não"} 💦
+                        Fertilizado: ${plantTime?.growthStatus?.isFertilized ? "Sim" : "Não"} ☢️
                     `;
 
                 // Exibe o modal com informações da planta
@@ -1461,79 +1453,249 @@ function showInspectModal(message) {
         }, 200); // Atraso de 100ms
     });
 }
-//Função para fechar o modal
-function fecharModal() {
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("modalInformation").style.display = "none";
-    document.getElementById("modalInformationInspect").style.display = "none";
-}
-//#endregion
 
 
-// Evento para plantar ao clicar no item do inventário
-document.querySelectorAll(".playInvetorySlot").forEach(slot => {
-    slot.addEventListener("click", async (event) => {
-        if (!selectedVaseSlot) {
-            console.error("Nenhum vaso selecionado para plantar!");
-            return;
-        }
-
-        const slotId = slot.id.replace("playInvetorySlot", "");
-        const seedTitleElement = document.querySelector(`#titleInvetorySlot${slotId}`);
-        if (!seedTitleElement) {
-            console.error("Não foi possível encontrar o nome da flor!");
-            return;
-        }
-
-        const selectedSeedName = seedTitleElement.textContent.trim();
-        console.log("Buscando item com nome:", selectedSeedName); // Debugging
-
-        // Verificar se a variável `items` está carregada corretamente
-        if (!Array.isArray(items) || items.length === 0) {
-            console.error("Itens não carregados corretamente. Verifique a função fetchItems.");
-            console.log("Itens disponíveis:", items); // Verifique o conteúdo de `items`
-            return;
-        }
-
-        // Procurar no array `items` o nome da semente
-        const selectedItem = items.find(item => {
-            // Compara os nomes
-            return item.itemNome.trim() === selectedSeedName.trim();
-        });
-
-        // Item não encontrado
-        if (!selectedItem) {
-            console.error(`Erro: Item com nome '${selectedSeedName}' não encontrado.`);
-            console.log("Itens disponíveis:", items.map(item => item.itemNome)); // Debugging
-            return;
-        }
-
-        console.log("Item encontrado:", selectedItem); // Debugging
-        // Mostrar modal e esperar resposta do usuário
-        const userConfirmed = await showConfirmationModal(`Deseja substituir a planta atual por "${selectedSeedName}"?`);
-
-        if (userConfirmed) {
-            // Certifique-se de que walletAddress está definido
-            const addressToUse = userData?.walletAddress || walletAddress;
-            
-            if (!addressToUse) {
-                console.error("Erro: Não foi possível determinar o endereço da carteira");
+// Evento para plantar ao clicar no vaso
+function plantVaso() {
+    document.querySelectorAll(".playInvetorySlot").forEach(slot => {
+        slot.addEventListener("click", async (event) => {
+            if (!selectedVaseSlot) {
+                console.error("Nenhum vaso selecionado para plantar!");
                 return;
             }
 
-            await plantSeed(addressToUse, selectedVaseSlot, selectedItem.itemId);
-            await updateVasoAndPlantImages(addressToUse);
-            await updateUIAndInventory(addressToUse);
-            playOpen();
-        } else {
-            console.log("Usuário cancelou o plantio.");
-        }
+            const slotId = slot.id.replace("playInvetorySlot", "");
+            const seedTitleElement = document.querySelector(`#titleInvetorySlot${slotId}`);
+            if (!seedTitleElement) {
+                console.error("Não foi possível encontrar o nome do item!");
+                return;
+            }
 
-        // Resetar seleção e fechar modal
-        document.querySelectorAll(".playInvetorySlot").forEach(slot => slot.classList.remove("pointer"));
-        selectedVaseSlot = null;
+            const selectedItemName = seedTitleElement.textContent.trim();
+            console.log("Item selecionado:", selectedItemName); // Debugging
+
+            // Verificar se a variável `items` está carregada corretamente
+            if (!Array.isArray(items) || items.length === 0) {
+                console.error("Itens não carregados corretamente. Verifique a função fetchItems.");
+                console.log("Itens disponíveis:", items); // Verifique o conteúdo de `items`
+                return;
+            }
+
+            // Procurar no array `items` o nome do item selecionado
+            const selectedItem = items.find(item => item.itemNome.trim() === selectedItemName.trim());
+            console.log(selectedItem);
+            // Item não encontrado
+            if (!selectedItem) {
+                console.error(`Erro: Item com nome '${selectedItemName}' não encontrado.`);
+                console.log("Itens disponíveis:", items.map(item => item.itemNome)); // Debugging
+                return;
+            }
+
+            console.log("Item encontrado:", selectedItem); // Debugging
+            
+            // Verificar status atual do vaso
+            const vaseData = await checkVaseStatus(selectedVaseSlot);
+            
+            // Definir o modo do item (utilitário ou semente)
+            const isUtility = ["Regador", "Fertilizante", "Anti-Parasita"].includes(selectedItemName);
+            if (vaseData && isUtility) {
+                // Lógica para aplicar utilitários
+                await applyUtilityToPlant(selectedVaseSlot, selectedItem, vaseData);
+            } else {
+                // Lógica para plantar sementes (nova ou substituição)
+                const confirmMessage = vaseData ? 
+                    `Deseja substituir a planta atual por "${selectedItemName}"?` : 
+                    `Deseja plantar "${selectedItemName}" neste vaso?`;
+                    
+                const userConfirmed = await showConfirmationModal(confirmMessage);
+
+                if (userConfirmed) {
+                    const addressToUse = userData?.walletAddress || walletAddress;
+                    
+                    if (!addressToUse) {
+                        console.error("Erro: Não foi possível determinar o endereço da carteira");
+                        return;
+                    }
+
+                    await plantSeed(addressToUse, selectedVaseSlot, selectedItem.itemId);
+                    await updateVasoAndPlantImages(addressToUse);
+                    await updateUIAndInventory(addressToUse);
+                    playOpen();
+                } else {
+                    console.log("Usuário cancelou o plantio.");
+                }
+            }
+
+            // Resetar seleção e fechar modal
+            document.querySelectorAll(".playInvetorySlot").forEach(slot => slot.classList.remove("pointer"));
+            selectedVaseSlot = null;
+            selectedItemName = null;
+        });
     });
-});
+}
+
+// Função para verificar o status de plantio do vaso selecionado
+async function checkVaseStatus(vaseSlotId) {
+    console.log("Vase status: Checkando", vaseSlotId);
+    const addressToUse = userData?.walletAddress || walletAddress;
+    
+    if (!addressToUse) {
+        console.error("Erro: Não foi possível determinar o endereço da carteira");
+        return null;
+    }
+    
+    // Buscar dados atualizados do usuário/vasos
+    try {
+        const userDoc = await updatePlayerStatus(addressToUse);
+        if (!userDoc || !userDoc.plantTime || !Array.isArray(userDoc.plantTime)) {
+            return null;
+        }
+        
+        // Encontrar o vaso pelo slotID
+        const vaseData = userDoc.plantTime.find(plant => plant.slotID == vaseSlotId);
+        return vaseData;
+    } catch (error) {
+        console.error("Erro ao verificar status do vaso:", error);
+        return null;
+    }
+}
+
+
+// Função para mostrar apenas utilitários no inventário
+async function mostrarInventarioUtilitarios() {
+    setupPagination("playInvetory", "playArrowNextInventory", "playArrowLastInventory", ".playInvetorySlots", 2);
+    // Captura os elementos do inventário e setas
+    const menuInventory2 = document.getElementById("menuInventory2");
+
+    // Esconde o inventário de utilitários e exibe o inventário principal
+    if (menuInventory2) menuInventory2.style.display = "none";
+    try {
+            if (!window.userData || !Array.isArray(window.userData.inventario)) {
+                console.error("❌ Dados do usuário ou inventário não disponíveis.");
+                return;
+            }
+
+            const itemMap = {
+                "Regador": "quantityAgua",
+                "Fertilizante": "quantityFertilize",
+                "Anti-Parasitas": "quantityAntiParasita",
+            };
+
+            // Filtrar apenas os itens utilitários e limitar a 4 slots
+            const itensUtilitarios = window.userData.inventario.filter(item => {
+                const [itemNome] = item.split(":").map(part => part.trim());
+                return itemMap[itemNome] !== undefined;
+            }).slice(0, 4);
+
+            // Limpar os slots
+            for (let i = 1; i <= 24; i++) {
+                limparSlot(i);
+            }
+
+            // Adicionar utilitários nos slots
+            itensUtilitarios.forEach((item, index) => {
+                const [itemNome, quantidade] = item.split(":").map(part => part.trim());
+                const slotIndex = index + 1;
+                const matchingItem = window.userData.items.find(i => i.itemNome === itemNome);
+
+                if (!matchingItem) {
+                    console.warn(`⚠️ Item '${itemNome}' não encontrado na loja.`);
+                    return;
+                }
+
+                atualizarSlot(slotIndex, itemNome, matchingItem.itemId, quantidade);
+                // Verifica se o slot existe antes de modificar
+                const slotElement = document.querySelector(`#playInvetorySlot${slotIndex}`);
+                if (slotElement) {
+                    const newSlotElement = slotElement.cloneNode(true);
+                    slotElement.parentNode.replaceChild(newSlotElement, slotElement);
+                    newSlotElement.addEventListener("click", () => aplicarUtilitario(matchingItem));
+                } else {
+                    console.error(`❌ Slot #playInvetorySlot${slotIndex} não encontrado!`);
+                }
+            });
+
+            console.log("✅ Inventário de utilitários atualizado.");
+    } catch (error) {
+        console.error("❌ Erro ao mostrar inventário de utilitários:", error);
+    }
+
+}
+
+
+// Função para limpar um slot do inventário
+function limparSlot(slotIndex) {
+    const titleElement = document.querySelector(`#titleInvetorySlot${slotIndex}`);
+    const imgElement = document.querySelector(`#imgSlotInventory${slotIndex}`);
+    const quantityElement = document.querySelector(`#quantityItemInventory${slotIndex}`);
+
+    if (titleElement) titleElement.textContent = "";
+    if (titleElement) titleElement.style.backgroundColor = "var(--incomun-color)";
+    if (imgElement) imgElement.src = "";
+    if (quantityElement) quantityElement.textContent = "";
+}
+
+// Função para atualizar um slot com um item específico
+function atualizarSlot(slotIndex, nome, imagemId, quantidade) {
+    const titleElement = document.querySelector(`#titleInvetorySlot${slotIndex}`);
+    const imgElement = document.querySelector(`#imgSlotInventory${slotIndex}`);
+    const quantityElement = document.querySelector(`#quantityItemInventory${slotIndex}`);
+    
+
+
+    if (titleElement) titleElement.textContent = nome;
+    if (titleElement) titleElement.style.backgroundColor = "var(--incomun-color)";
+    if (imgElement) imgElement.src = `img/shop/${imagemId}.png`;
+    if (quantityElement) quantityElement.textContent = quantidade;
+}
+
+// Função auxiliar para aplicar utilitários corretamente com async/await
+async function aplicarUtilitario(utilitario) {
+    console.log("✅ Função aplicarUtilitario chamada com:", utilitario);
+
+    if (selectedVaseSlot === null || selectedVaseSlot === undefined) {
+        console.error("❌ Nenhum vaso selecionado.");
+        return;
+    }
+
+    // Buscar os dados do vaso no userData
+    const vaseData = userData?.plantTime.find(
+        plant => String(plant.slotID) === String(selectedVaseSlot)
+    );
+
+    if (!vaseData) {
+        console.error("❌ Dados do vaso não encontrados para o slot:", selectedVaseSlot);
+        return;
+    }
+
+    console.log("📦 Aplicando utilitário no vaso:", selectedVaseSlot, "com dados:", vaseData);
+
+    try {
+        await applyUtilityToPlant(selectedVaseSlot, utilitario, vaseData);
+        console.log("✅ Utilitário aplicado com sucesso!");
+
+        // RESETAR seleção para permitir o plantio novamente
+        selectedVaseSlot = null;
+        selectedItemName = null;
+
+        // Fechar inventário de utilitários e abrir a tela do jogo
+        playOpen();
+
+        // Atualizar dados do usuário
+        await updatePlayerStatus(userData.walletAddress);
+
+    } catch (error) {
+        console.error("❌ Erro ao aplicar utilitário:", error);
+    }
+}
+
+
+
+
+
+
+//#endregion
+
 
 
 //#region Button Events
@@ -1546,6 +1708,9 @@ btnShopMenu.addEventListener("click", shopMenuOpen);
 btnPlayMenu.addEventListener("click", playMenuOpen);
 // Button Inventory
 btnInventoryOpen.addEventListener("click", inventoryOpen);
+
+// Utilitarios Menu Inventory
+menuInventory2.addEventListener("click", mostrarInventarioUtilitarios);
 // Button Play Game Mode
 btnPlayOpen.addEventListener("click", playOpen);
 // Button Exchange/Trade
@@ -1558,31 +1723,7 @@ btnWalletDisconnect.addEventListener("click", logout);
 startMusic();
 attachVolumeListeners();
 loadVolumeSettings();
-
-
-
-// Evento click slot/shop walletAddress
-function addSlotClickListeners(walletAddress) {
-    // Verifica se walletAddress é válido
-    if (!walletAddress || typeof walletAddress !== 'string') {
-        console.error("Erro: walletAddress inválido:", walletAddress);
-        return;
-    }
-
-    for (let i = 1; i <= 22; i++) {
-        const slotElement = document.getElementById(`shopSlot${i}`);
-        if (slotElement) {
-            if (!slotElement.dataset.listenerAdded) {
-                // Cria um closure para garantir que walletAddress será preservado
-                const walletAddressCopy = walletAddress;
-                slotElement.addEventListener('click', () => onSlotClick(i, walletAddressCopy));
-                slotElement.dataset.listenerAdded = "true";
-            }
-        } else {
-            console.warn(`Elemento shopSlot${i} não encontrado`);
-        }
-    }
-}
+plantVaso();
 
 // Aguardar o carregamento do DOM para inicializar a funcionalidade
 document.addEventListener('DOMContentLoaded', () => {
