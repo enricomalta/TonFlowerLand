@@ -34,11 +34,11 @@ window.toggleMute = function (soundType) {
 };
 
 // Botão Save
-// if (btnSaveConfig) {
-//     btnSaveConfig.addEventListener("click", saveConfig);
-// } else {
-//     console.error("Botão btnSaveConfig não encontrado!");
-// }
+if (btnSaveConfig) {
+    btnSaveConfig.addEventListener("click", saveConfig);
+} else {
+    console.error("Botão btnSaveConfig não encontrado!");
+}
 
 
 function saveConfig () {
