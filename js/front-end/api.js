@@ -1,5 +1,6 @@
+import { playOpen } from './index.js';
 // const API_URL = "https://ton-flower-land-back-end.vercel.app"; // URL do seu back-end
-const API_URL = "https://ton-flower-land-back-end.vercel.app"
+const API_URL = "http://192.168.0.100:3000"
 let isProcessing = false; // Variável de controle para evitar múltiplos cliques rápidos
 export let items = []; // Inicializando o array de itens
 
@@ -7,12 +8,14 @@ export let items = []; // Inicializando o array de itens
 
 // Criar um novo usuário
 export async function createUser(walletAddress) {
+    const telegramWebApp = window.Telegram.WebApp;
+    const telegramUserId = telegramWebApp.initDataUnsafe.user.id;
     console.log("criando usuario...");
     try {
         const response = await fetch(`${API_URL}/createUser`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ walletAddress }),
+            body: JSON.stringify({ walletAddress, telegramUserId }),
             credentials: 'include' // Para enviar o cookie JWT
         });
         const data = await response.json();
@@ -69,7 +72,7 @@ export  async function removeItem(walletAddress, itemNome, quantidade) {
 
         // Processa a resposta JSON
         const data = await response.json();
-        // console.log("Resposta do servidor:", data);
+        console.log("Resposta do servidor:", data);
         return data;  // Retorna o resultado para um possível uso posterior
     } catch (error) {
         console.error("Erro ao enviar requisição:", error);
@@ -102,91 +105,94 @@ async function updateTokenBalance(walletAddress, novoSaldo) {
 
 // Função para plantar
 export async function plantSeed(walletAddress, selectedVaseSlot, selectedSeed, itemTime, isFertilized, isProtect, isWater) {
-    console.log("Plantando");
-
-    // Verificação inicial do walletAddress
-    if (!walletAddress) {
-        console.error("walletAddress não fornecido para plantSeed");
-        // Tenta recuperar do userData global
-        if (window.userData && window.userData.walletAddress) {
-            walletAddress = window.userData.walletAddress;
-            console.log("Usando walletAddress do userData global:", walletAddress);
-        } else {
-            console.error("Não foi possível obter walletAddress de nenhuma fonte");
-            return;
-        }
-    }
-
-
-    // Buscar o item com base no selectedSeed (ID único)
-    const selectedItem = items.find(item => item.itemId === selectedSeed);
-
-    if (!selectedItem) {
-        console.error(`Erro: item com ID ${selectedSeed} não encontrado.`);
-        return;
-    }
-
-    // Verificar se o itemTime está presente e válido
-    const selectedItemTime = parseFloat(selectedItem.itemTime) || 0;  // Converte para número ou 0 se inválido
-    console.log(`Tempo do item para plantio (em horas): ${selectedItemTime}`);
-
-    if (selectedItemTime <= 0) {
-        console.error(`Erro: item com ID ${selectedSeed} não tem tempo de plantio válido.`);
-        return;
-    }
-
-    // Função para calcular o tempo de colheita
-    function calculateHarvestTime(itemTime) {
-        const now = new Date();
-        const harvestTime = new Date(now.getTime() + itemTime * 60 * 60 * 1000); // itemTime em horas
-        return harvestTime;
-    }
-
-    const harvestTime = calculateHarvestTime(selectedItemTime); // Calculando a data de colheita
-    console.log(`Data de colheita calculada: ${harvestTime}`);
-
-    // Convertendo a data de colheita para ISO 8601
-    const harvestTimeISO = harvestTime.toISOString();
-    console.log(`Data de colheita em ISO 8601: ${harvestTimeISO}`);
-
     try {
-        // Verifique se a walletAddress está presente
+        console.log("Iniciando processo de plantio");
+        
+        // Verificação inicial do walletAddress
         if (!walletAddress) {
-            console.error("Erro: walletAddress não é válida antes da chamada de updatePlayerStatus!");
-            return;
+            console.error("walletAddress não fornecido para plantSeed");
+            // Tenta recuperar do userData global
+            if (window.userData && window.userData.walletAddress) {
+                walletAddress = window.userData.walletAddress;
+                console.log("Usando walletAddress do userData global:", walletAddress);
+            } else {
+                console.error("Não foi possível obter walletAddress de nenhuma fonte");
+                return { success: false, error: "Endereço de carteira não encontrado" };
+            }
         }
-
-        // Chama a função para garantir que o status do jogador está atualizado
+        
+        // Buscar o item com base no selectedSeed (ID único)
+        const selectedItem = items.find(item => item.itemId === selectedSeed);
+        if (!selectedItem) {
+            console.error(`Erro: item com ID ${selectedSeed} não encontrado.`);
+            return { success: false, error: "Item não encontrado" };
+        }
+        
+        // Verificar se o itemTime está presente e válido
+        const selectedItemTime = parseFloat(selectedItem.itemTime) || 0;  // Converte para número ou 0 se inválido
+        console.log(`Tempo do item para plantio (em horas): ${selectedItemTime}`);
+        if (selectedItemTime <= 0) {
+            console.error(`Erro: item com ID ${selectedSeed} não tem tempo de plantio válido.`);
+            return { success: false, error: "Tempo de plantio inválido" };
+        }
+        
+        // Calcular o tempo de colheita
+        const now = new Date();
+        const plantDate = now.toISOString();
+        
+        // Definir o status de crescimento
+        const growthStatus = {
+            isWatered: isWater ?? false,
+            isParasita: false,  // Inicialmente sem parasitas
+            isProtected: isProtect ?? false,
+            isFertilized: isFertilized ?? false,
+            lastUpdated: now.toISOString(),
+            elapsedTime: 0, // Tempo já decorrido em milissegundos
+            totalTime: selectedItemTime * 60 * 60 * 1000 // Tempo total em milissegundos
+        };
+        
+        // Calcular a data de colheita com base nos status
+        let harvestDate;
+        if (isWater && isProtect) {
+            // Planta regada e protegida cresce normalmente
+            harvestDate = new Date(now.getTime() + selectedItemTime * 60 * 60 * 1000).toISOString();
+        } else if (isWater && !isParasita) {
+            // Planta regada e sem parasitas cresce normalmente
+            harvestDate = new Date(now.getTime() + selectedItemTime * 60 * 60 * 1000).toISOString();
+        } else {
+            // Planta não está crescendo ativamente
+            const futureDate = new Date();
+            futureDate.setFullYear(futureDate.getFullYear() + 20); // Data 20 anos no futuro
+            harvestDate = futureDate.toISOString();
+        }
+        
+        // Atualizar status do jogador
         const userStatus = await updatePlayerStatus(walletAddress);
-        console.log("walletAddress dentro do plantSeed (depois de updatePlayerStatus):", userStatus);
-
-        // Verifique se o status do usuário foi encontrado e se a walletAddress está correta
         if (!userStatus || !userStatus.walletAddress) {
             console.error("Erro: walletAddress não encontrada ou inválida no status do usuário.");
-            return;
+            return { success: false, error: "Status do jogador não encontrado" };
         }
-
-        // Atribuir a walletAddress correta
+        
+        // Usar a wallet address confirmada
         walletAddress = userStatus.walletAddress;
-        console.log(`walletAddress atribuído: ${walletAddress}`);
-
-        // Envia a requisição para a API de plantio
+        console.log(`walletAddress confirmada: ${walletAddress}`);
+        
+        // Preparar payload para a API
         const requestPayload = {
             walletAddress,
             slotID: selectedVaseSlot,
-            itemNome: selectedItem.itemNome,  // Nome da semente
-            itemTime: selectedItemTime,  // Tempo do item
-            itemId: selectedItem.itemId,  // Certifique-se de que itemId está correto
+            itemNome: selectedItem.itemNome,
+            itemTime: selectedItemTime,
+            itemId: selectedItem.itemId,
             raridade: selectedItem.raridade,
-            plantDate: new Date().toISOString(),  // Data atual de plantio
-            harvestDate: harvestTimeISO,  // Data calculada de colheita
-            isFertilized: isFertilized ?? false, // Se undefined, define como false
-            isProtect: isProtect ?? false,       // Se undefined, define como false
-            isWater: isWater ?? false,           // Se undefined, define como false
+            plantDate,
+            harvestDate,
+            growthStatus
         };
-
+        
         console.log("Enviando dados para a API:", requestPayload);
-
+        
+        // Enviar requisição para a API
         const response = await fetch(`${API_URL}/plantSeed`, {
             method: "POST",
             headers: {
@@ -195,21 +201,130 @@ export async function plantSeed(walletAddress, selectedVaseSlot, selectedSeed, i
             body: JSON.stringify(requestPayload),
             credentials: 'include' // Para enviar o cookie JWT
         });
-
+        
+        // Processar resposta
         const data = await response.json();
-
+        
         if (response.ok) {
-            console.log("Plantio realizado com sucesso:", data.success);
-            // alert(`Semente plantada! Hora da colheita: ${harvestTime.toLocaleTimeString()}`);
+            console.log("Plantio realizado com sucesso:", data);
+            return { 
+                success: true, 
+                message: `Semente plantada com sucesso!`,
+                data: data
+            };
         } else {
             console.error("Erro na resposta da API:", data.error || 'Erro desconhecido');
-            // alert("Erro ao realizar o plantio. Tente novamente.");
+            return { 
+                success: false, 
+                error: data.error || "Erro ao realizar o plantio" 
+            };
         }
     } catch (error) {
         console.error("Erro ao enviar dados de plantio:", error);
-        // alert("Erro inesperado. Tente novamente.");
+        return { 
+            success: false, 
+            error: error.message || "Erro inesperado durante o plantio" 
+        };
     }
 }
+
+// Função atualizar status da planta
+export async function updatePlantStatus(walletAddress, slotId, statusField, newValue, utilityName) {
+    try {
+        console.log(`Enviando requisição para atualizar ${statusField} no vaso ${slotId} usando ${utilityName}`);
+        
+        // Corrija a URL para apontar para o servidor Node.js na porta 3000 (sem /api/)
+        const response = await fetch(`${API_URL}/updatePlantStatus`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                walletAddress,
+                slotId,
+                statusField,
+                newValue,
+                utilityName // Adicione o nome do utilitário para verificação no backend
+            })
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || `Erro na API: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        if (!data.success) {
+            throw new Error(data.message);
+        }
+        
+        console.log(`Status ${statusField} atualizado para ${newValue} no vaso ${slotId}`);
+        return data;
+        
+    } catch (error) {
+        console.error("Erro ao atualizar status da planta:", error);
+        throw error;
+    }
+}
+
+// Função aplicando utilitario na planta API
+export async function applyUtilityToPlant(slotId, utility, vaseData) {
+    try {
+        console.log("vaseData:", vaseData);
+        console.log("Utility recebido:", utility);
+        console.log("Nome do utilitário:", utility.itemNome);
+        
+        // Obter o status atual da planta
+        let statusField = "";
+        let newValue = true;
+        
+        // Determinar qual campo atualizar com base no utilitário
+        switch (utility.itemNome) {
+            case "Fertilizante":
+                statusField = "isFertilized";
+                newValue = true;
+                break;
+            case "Regador":
+                statusField = "isWatered";
+                newValue = true;
+                break;
+            case "Protetor":
+                statusField = "isProtected";
+                newValue = true;
+                break;
+            case "Anti-Parasitas":
+                statusField = "isParasita";
+                newValue = false; // Note que aqui é false para remover parasitas
+                break;
+            default:
+                throw new Error(`Utilitário desconhecido: ${utility.itemNome}`);
+        }
+        
+        // Chamar a API com os parâmetros corretos, incluindo o nome do utilitário
+        const result = await updatePlantStatus(
+            userData.walletAddress, 
+            slotId, 
+            statusField, 
+            newValue, 
+            utility.itemNome
+        );
+        
+        // Se chegou aqui, a API foi bem-sucedida
+        // Atualizar a interface do usuário
+        if (result.updatedPlant) {
+            const event = new Event('updateUI');
+            window.dispatchEvent(event);
+            playOpen();
+        }
+    
+        
+    } catch (error) {
+        console.error("Erro ao aplicar utilitário:", error);
+    }
+}
+
 
 // Função para coletar
 export async function colectSeed(walletAddress, slotID) {
@@ -354,26 +469,23 @@ export async function fetchItems() {
 
 // Player Request API
 export async function updatePlayerStatus(walletAddress) {
-    console.log("Update player status");
-
+    console.log('Update player status');
     try {
-        // Busca status do usuário na API
+        // Primeiramente tenta buscar o status do usuário
         const response = await fetch(`${API_URL}/user/${walletAddress}`, {
-            method: "GET",
-            credentials: "include" // Envia automaticamente os cookies HTTP-only
+            credentials: 'include' // Para enviar o cookie JWT
         });
 
         if (response.status === 404) {
-            console.log("Usuário não encontrado. Criando novo usuário...");
-
-            // Se usuário não existir, cria um novo
+            // Se não encontrar o usuário, cria um novo
+            // console.log("Usuário não encontrado. Criando novo usuário...");
             const createResponse = await fetch(`${API_URL}/createUser`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ walletAddress }),
-                credentials: "include" // Envia os cookies também
+                credentials: 'include' // Para enviar o cookie JWT
             });
 
             if (!createResponse.ok) {
@@ -383,20 +495,15 @@ export async function updatePlayerStatus(walletAddress) {
             const data = await createResponse.json();
             return data.userData;  // Retorna os dados do novo usuário
         } else if (response.ok) {
-            // Se o usuário existir, retorna os dados dele
+            // Se o usuário for encontrado, retorna os dados dele
             const data = await response.json();
             return data;
-        } else {
-            console.error("Erro ao buscar status do jogador:", response.statusText);
-            return null;
         }
     } catch (error) {
         console.error("Erro ao buscar status do jogador:", error);
         return null;
     }
 }
-
-
 
 
 // Check o saldo/comprar API
@@ -513,57 +620,3 @@ export async function onSlotClick(slotId, walletAddress) {
         isProcessing = false;
     }, 1000);
 }
-
-// Login
-
-// async function login(walletAddress) {
-//     try {
-//         const response = await fetch(`${API_URL}/login`, {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify({ walletAddress }),
-//         });
-
-//         if (!response.ok) {
-//             throw new Error(`Erro no login: ${response.status}`);
-//         }
-
-//         const data = await response.json();
-//         console.log("Resposta completa da API:", data);
-
-//         const token = data.token;
-//         console.log("🔑 Token recebido:", token);
-
-//         return token;  // Retorna o token ou undefined se não encontrado
-
-//     } catch (error) {
-//         console.error("Erro ao fazer login:", error);
-//         return null;  // Retorna null se houver erro
-//     }
-// }
-
-// Valida usuario
-// export async function fetchProfile(walletAddress) {
-//     try {
-//         const response = await fetch(`${API_URL}/user/${walletAddress}`, {
-//             method: "GET",
-//             credentials: 'include' // Importante para enviar cookies
-//         });
-
-//         if (!response.ok) {
-//             throw new Error(`Erro ao buscar perfil: ${response.status}`);
-//         }
-
-//         const profileData = await response.json();
-//         console.log("Dados do perfil:", profileData);
-        
-//         // Atualizar UI com os dados do perfil
-//         // updateProfileUI(profileData);
-        
-//         return profileData;
-//     } catch (error) {
-//         console.error("Erro ao buscar perfil:", error);
-//     }
-// }
