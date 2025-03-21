@@ -620,3 +620,29 @@ export async function onSlotClick(slotId, walletAddress) {
         isProcessing = false;
     }, 1000);
 }
+
+
+// JWT Telegram
+async function getProfile() {
+    const token = localStorage.getItem("jwt"); // Pegamos o token armazenado
+
+    if (!token) {
+        console.error("⚠️ Nenhum token encontrado!");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/getProfile`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`, // Enviamos o token no cabeçalho
+                "Content-Type": "application/json"
+            }
+        });
+
+        const data = await response.json();
+        console.log("Perfil do usuário:", data);
+    } catch (error) {
+        console.error("Erro ao buscar perfil:", error);
+    }
+}
