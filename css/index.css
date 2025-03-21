@@ -269,7 +269,7 @@ img:focus {
     top: 50%;
     transform: translate(-50%, -50%);
     width: 200px;
-    height: 220px;
+    height: 250px;
     background: var(--shopSlotPrice);
     color: var(--txt-text);
     border: 1px solid var(--borderGameBorder);
@@ -290,7 +290,7 @@ img:focus {
     z-index: 999;
 }
 .modalInformationInspect button {
-    margin: 10px;
+    margin-top: 10px;
     padding: 8px 15px;
     border: none;
     cursor: pointer;
@@ -609,6 +609,22 @@ img:focus {
 }
 .playInvetoryContent {
     gap: 15px;
+}
+.menuInventorySelect {
+    gap: 40px;
+}
+.menuInventory{
+    background: var(--shopSlotItem);
+    padding: 15px 20px 15px 20px;
+    gap: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 9.0);
+}
+#menuInventory1{
+    display: none;
+}
+#menuInventory2{
+    display: none;
 }
 .playInvetorySlots {
     display: flex;
