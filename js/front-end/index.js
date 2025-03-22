@@ -242,9 +242,9 @@ async function handleWalletConnected(wallet) {
         console.log("Verificando usuário na API...");
         const response = await fetch(`${API_URL}/login`, {
             method: "POST",
+            credentials: "include",  // Isso inclui os cookies na requisição
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ walletAddress }),
-            credentials: 'include' // Importante para enviar e receber cookies
         });
 
         if (!response.ok) {
@@ -254,9 +254,9 @@ async function handleWalletConnected(wallet) {
                 
                 const createResponse = await fetch(`${API_URL}/createUser`, {
                     method: "POST",
+                    credentials: "include",  // Isso inclui os cookies na requisição
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ walletAddress }),
-                    credentials: 'include' // Importante para cookies
                 });
 
                 if (!createResponse.ok) {
@@ -343,11 +343,11 @@ async function login(walletAddress) {
     try {
         const response = await fetch(`${API_URL}/login`, {
             method: "POST",
+            credentials: "include",  // Isso inclui os cookies na requisição
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ walletAddress }),
-            credentials: "include"  // Isso inclui os cookies na requisição
         });
 
         if (!response.ok) {
