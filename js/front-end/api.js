@@ -481,6 +481,7 @@ export async function updatePlayerStatus(walletAddress) {
             // console.log("Usuário não encontrado. Criando novo usuário...");
             const createResponse = await fetch(`${API_URL}/createUser`, {
                 method: "POST",
+                credentials: 'include', // Para enviar o cookie JWT
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${localStorage.getItem("token")}`
