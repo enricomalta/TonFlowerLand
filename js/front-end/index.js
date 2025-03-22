@@ -268,6 +268,16 @@ async function handleWalletConnected(wallet) {
             }
         }
         
+
+        // Adiciona a chamada para a função login
+        const token = await login(walletAddress);
+        if (token) {
+            console.log("Token salvo no localStorage:", token);
+        } else {
+            console.warn("Nenhum token recebido!");
+        }
+
+
         // Agora que o usuário existe, buscar os dados atualizados
         // console.log("Buscando dados do usuário...");
         const userData = await updatePlayerStatus(walletAddress);
@@ -328,6 +338,7 @@ async function handleWalletConnected(wallet) {
 
 
 
+
 async function login(walletAddress) {
     try {
         const response = await fetch(`${API_URL}/login`, {
@@ -345,6 +356,10 @@ async function login(walletAddress) {
 
         const data = await response.json();
         console.log("Resposta completa da API:", data);
+
+        if (data.token) {
+            localStorage.setItem("token", data.token);
+        }
 
         return data.token;  // Retorna o token que foi enviado diretamente na resposta
     } catch (error) {
