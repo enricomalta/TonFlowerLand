@@ -482,10 +482,10 @@ export async function updatePlayerStatus(walletAddress) {
             const createResponse = await fetch(`${API_URL}/createUser`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
-                body: JSON.stringify({ walletAddress }),
-                credentials: 'include' // Para enviar o cookie JWT
+                body: JSON.stringify({ walletAddress })
             });
 
             if (!createResponse.ok) {
