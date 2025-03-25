@@ -1,6 +1,6 @@
 import { playOpen } from './index.js';
 const API_URL = "https://ton-flower-land-back-end.vercel.app"; // URL do seu back-end
-// const API_URL = "http://192.168.0.100:3000"
+// const API_URL = "https://192.168.0.100:443"
 let isProcessing = false; // Variável de controle para evitar múltiplos cliques rápidos
 export let items = []; // Inicializando o array de itens
 
@@ -481,12 +481,11 @@ export async function updatePlayerStatus(walletAddress) {
             // console.log("Usuário não encontrado. Criando novo usuário...");
             const createResponse = await fetch(`${API_URL}/createUser`, {
                 method: "POST",
-                credentials: 'include', // Para enviar o cookie JWT
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem("token")}`
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ walletAddress })
+                body: JSON.stringify({ walletAddress }),
+                credentials: 'include' // Para enviar o cookie JWT
             });
 
             if (!createResponse.ok) {
@@ -622,9 +621,8 @@ export async function onSlotClick(slotId, walletAddress) {
     }, 1000);
 }
 
-
 // JWT Telegram
-async function getProfile() {
+export async function getProfile() {
     const token = localStorage.getItem("jwt"); // Pegamos o token armazenado
 
     if (!token) {
@@ -635,10 +633,12 @@ async function getProfile() {
     try {
         const response = await fetch(`${API_URL}/getProfile`, {
             method: "GET",
+            credentials: 'include',
             headers: {
                 "Authorization": `Bearer ${token}`, // Enviamos o token no cabeçalho
                 "Content-Type": "application/json"
             }
+            
         });
 
         const data = await response.json();
