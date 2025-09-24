@@ -1,0 +1,1070 @@
+:root {
+    --wallet-color: #666666;
+    --btn-connectWallet: #247228;
+
+    --shop-color: #556b2f;
+    --play-color: #8b7046;
+    --trade-color: #808080;
+    
+    --txt-title: #000000;
+    --txt-subtitle: #fffb00;
+    --txt-text: #ffffff;
+
+    --borderGameBorder: #ffffff;
+    
+    --shopSlotItem: #94a4a8;
+    --shopSlotPrice: #444444;
+
+    --incomun-color: #c2c2c2;
+    --comun-color: #4f9258;
+    --raro-color: #5b81a0;
+    --epico-color: #a54c4c;
+    --lendario-color: #b4be5a;
+    --mitico-color: #9355a0;
+    --desconhecido-color: #000000;
+
+    --body-config: #292929;
+}
+
+@font-face {
+    font-family: 'Bubblegum Sans';
+    src: url('/font/BubblegumSans-Regular.ttf') format('truetype');
+}
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Bubblegum Sans';
+
+    user-select: none; /* Impede a seleção de texto */
+    -webkit-user-drag: none; /* Impede arrastar imagens no Chrome/Safari */
+    -webkit-touch-callout: none; /* Remove o menu de contexto em dispositivos móveis */
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: none !important; /* Remove qualquer fundo */
+}
+/* ARQUITETURA DO GRID FLEX-BOX */
+.column {
+    display: flex;
+    flex-direction: column;
+}
+.row {
+    display: flex;
+    flex-direction: row;
+}
+.center-h {
+    justify-content: center;
+}
+.center-v {
+    align-items: center;
+}
+.center-x {
+    justify-content: center;
+    align-items: center;
+}
+.justify-start {
+    justify-content: start;
+}
+.justify-end {
+    justify-content: flex-end;
+}
+.justify-s-e {
+    justify-content: space-between
+}
+.justify-flex-start {
+    justify-content: flex-start;
+}
+.align-flex-start {
+    align-self: flex-start
+}
+.wd-33p {
+    display: flex;
+    width: 33%;
+}
+.wd-50p {
+    display: flex;
+    width: 50%;
+}
+.wd-100p {
+    display: flex;
+    width: 100%;
+}
+.flex {
+    display: flex;
+}
+.block {
+    display: block;
+}
+.none {
+    display: none;
+}
+.input {
+    outline: none;
+    border: none;
+    user-select: none;
+    pointer-events: none; /* Bloqueia interações */
+    caret-color: transparent; /* Esconde o cursor */
+}
+.input2 {
+    outline: none;
+    border: none;
+    user-select: none;
+    /* pointer-events: none; */
+    caret-color: transparent; /* Esconde o cursor */
+}
+.pointer {
+    cursor: pointer;
+}
+.fundo {
+    background: var(--body-config);
+    width: 100vw;
+    height: 100vh;
+}
+.gameSceen {
+    width: 350px;
+    min-height: 640px;
+}
+
+img {
+    -webkit-tap-highlight-color: transparent; /* Remove o highlight azul no toque */
+    user-select: none; /* Impede a seleção do texto/imagem */
+    outline: none; /* Remove a borda de foco */
+}
+img:focus {
+    outline: none;
+}
+/* FIM GRID FLEX-BOX */
+
+
+/* TOP */
+.top {
+    max-height: 7%;
+    min-height: 7%;
+    border: 1px solid var(--borderGameBorder);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.coins {
+    width: 100%;
+    align-items: flex-start;
+}
+.criptoNumber img {
+    margin-left: 12.25px;
+    min-width: 18px;
+}
+.criptoNumber {
+    margin-top: 2%;
+    width: 70px;
+}
+.criptoNumber input {
+    margin-left: 11%;
+    width: 80px;
+    text-align: center;
+    border-color: transparent;
+    border-radius: 8px;
+    outline: none;
+    text-decoration: none;
+}
+.coinNumber img {
+    margin-left: 12.25px;
+    width: 18px;
+}
+.coinNumber {
+    margin-top: 2%;
+}
+.coinNumber input{
+    margin-left: 5%;
+    width: 80px;
+    text-align: center;
+    border-color: transparent;
+    border-radius: 8px;
+    outline: none;
+    text-decoration: none;
+}
+.status {
+    margin-left: 5%;
+    width: 100%;
+}
+.statusNumber img {
+    margin-left: 8%;
+    width: 18px;
+}
+.statusNumber {
+    margin-top: 2%;
+}
+.statusNumber input{
+    margin-left: 5%;
+    width: 80px;
+    text-align: center;
+    border-color: transparent;
+    border-radius: 8px;
+    outline: none;
+    text-decoration: none;
+}
+.logo {
+    width: 40%;
+}
+.logo img {
+    width: 30px;
+}
+.config {
+    width: 100%;
+}
+.config img {
+    width: 20%;
+}
+/* FIM TOP */
+
+
+/* MIDDLE */
+.middle {
+    height: 86%;
+    background: white;
+    border: 1px solid var(--borderGameBorder);
+    border-top: 0px solid transparent;
+    border-bottom: 0px solid transparent;
+}
+.overlay {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+.modalInformation {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 90px;
+    background: var(--shopSlotPrice);
+    color: var(--txt-text);
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    text-align: center;
+    z-index: 1000;
+}
+.modalInformation button {
+    margin: 10px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+.btn-sim {
+    background-color: #28a745;
+    color: white;
+}
+.btn-nao {
+    background-color: #dc3545;
+    color: white;
+}
+.modalInformationInspect {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 250px;
+    background: var(--shopSlotPrice);
+    color: var(--txt-text);
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    text-align: center;
+    z-index: 1000;
+}
+.modalInformationInspect button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+.btn-x-inspect {
+    background-color: #28a745;
+    color: white;
+}
+.modalInformationVaso {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 120px;
+    background: var(--shopSlotPrice);
+    color: var(--txt-text);
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    text-align: center;
+    z-index: 1000;
+}
+.modalInformationVaso button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+.input-tempo-restante {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    color: var(--txt-text);
+    outline: none;
+    width: 200px;
+}
+.btn-remove-parasita {
+    background: #e74c3c;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.btn-x-vaso {
+    background-color: #28a745;
+    color: white;
+}
+
+/* MODAL BASE*/
+#walletModal {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    width: 350px;
+    height: 655px;
+    background: var(--wallet-color);
+}
+#configModal {
+    display: none;
+    background: var(--body-config);
+    position: absolute;
+    width: 348px;
+    height: 557px;
+    border-bottom: 1px solid var(--borderGameBorder);
+    border-top: 1px solid var(--borderGameBorder);
+}
+#shopModal {
+    display: none;
+    background: var(--shop-color);
+
+    /* background: url('/img/themes/shop.png') no-repeat center center;
+    background-size: cover; */
+
+    width: 350px;
+    height: 559px;
+}
+#playModal {
+    display: none;
+    background: var(--play-color);
+    width: 350px;
+    height: 559px;
+}
+#tradeModal {
+    display: none;
+    background: var(--trade-color);
+    width: 350px;
+    height: 559px;
+}
+#playMenuOpen {
+    display: none;
+    background: var(--play-color);
+    width: 348px;
+    height: 559px;
+    border-left: 1px solid var(--borderGameBorder);
+    border-right: 1px solid var(--borderGameBorder);
+}
+#playGameBoard{
+    display: none;
+    background: var(--play-color);
+    width: 348px;
+    height: 559px;
+    border-left: 1px solid var(--borderGameBorder);
+    border-right: 1px solid var(--borderGameBorder);
+}
+#playInvetory {
+    display: none;
+    justify-content: space-between;
+    /* background: var(--play-color); */
+    width: 348px;
+    height: 559px;
+    border-left: 1px solid var(--borderGameBorder);
+    border-right: 1px solid var(--borderGameBorder);
+}
+#shopMenuModal {
+    display: none;
+    justify-content: center;
+    /* background: var(--play-color); */
+    width: 350px;
+    height: 559px;
+}
+#subShopModal {
+    display: none;
+    background: var(--shop-color);
+    width: 350px;
+    height: 559px;
+}
+/* CONFIG MODAL */
+#startScreen {
+    width: 350px;
+    height: 655px;
+}
+.btnWallet {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    margin-top: 250px;
+    width: 100px;
+    height: 60px;
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 10px;
+    background: var(--btn-connectWallet);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4), 
+    inset -2px -2px 5px rgba(255, 255, 255, 0.1), 
+    inset 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+.btnWallet:hover {
+    box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.5), 
+                inset -2px -2px 8px rgba(255, 255, 255, 0.2), 
+                inset 2px 2px 8px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+}
+.btnWallet h1 {
+    font-weight: 400;
+    font-size: 20px;
+    text-align: center;
+    text-align: center;
+    transition: transform 0.2s;
+    color: var(--txt-text);
+}
+.btnWallet:active h1 {
+    transform: scale(0.9);
+}
+.btnWallet:active {
+    box-shadow: inset 4px 4px 10px rgba(0, 0, 0, 0.6), 
+                inset -2px -2px 8px rgba(255, 255, 255, 0.2);
+    transform: scale(0.95);
+}
+.web3 {
+    height: 30%;
+}
+.web3-top {
+    width: 100%;
+}
+.web3-title {
+    font-size: 18px;
+    color: var(--txt-text);
+    /* margin-left: 30%; */
+}
+.close-btn-right {
+    margin-left: 25%;
+}
+.web3-endereco {
+    margin-top: 5%;
+    margin-left: 5%;
+    margin-bottom: 5%;
+    color: var(--txt-text);
+}
+.web3-adress {
+    margin-left: 5%;
+    display: flex;
+    flex-direction: row;
+
+}
+.web3-adress input {
+    font-size: 10px;
+    text-align: center;
+    width: 80%;
+    border-radius: 8px;
+}
+.disconnectWallet {
+    width: 8%;
+    margin-left: 4%;
+}
+.soundConfig {
+    margin-top: 20%;
+}
+.soundMusic, .soundFx, .soundCursor {
+    justify-items: center;
+    width: 100%;
+}
+.soundTxt {
+    color: var(--txt-text);
+    margin-right: 10px;
+}
+.volumeMuteImg {
+    width: 20px;
+}
+/* Botão de Fechar (X) */
+.close-btn-right {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--txt-text);
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 25%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+.close-btn-right:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: red;
+    transform: scale(1.5);
+}
+.close-btn-right:active {
+    transform: scale(1.5);
+    color: white;
+    background: rgba(255, 0, 0, 0.4);
+}
+/* Botão OK */
+.btn-save-cofig button {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    margin-top: 25px;
+}
+.btn-save-cofig button:hover {
+    background: linear-gradient(135deg, #66BB6A, #388E3C);
+    transform: scale(1.05);
+}
+.btn-save-cofig button:active {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, #2E7D32, #1b4b1e);
+    box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* SHOP MODAL */
+.arrow {
+    display: flex;
+    height: 100%;
+    width: 10%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+.arrowImg {
+    width: 25px;
+}
+#fixArrow {
+    margin-top: -50px;
+    margin-left: -10px;
+}
+.shopSlot { 
+    width: 120px;
+    height: 120px;
+    margin-left: 3%;
+    margin-right: 3%;
+    margin-top: 6.5%;
+    /* box-shadow: 2px 2px 5px rgba(0, 0, 0, 9.0); */
+}
+.titleSlot {
+    width: 120px;
+    height: 20px;
+    background: var(--incomun-color);
+    border: 1px solid var(--borderGameBorder);
+    border-bottom: 0px solid var(--borderGameBorder);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.titleSlot h1 {
+    font-size: 14px;
+    font-weight: 100;
+    text-align: center;
+    color: var(--txt-title);
+}
+.shopSlotItem {
+    width: 120px;
+    height: 80px;
+    background: var(--shopSlotItem);
+    border: 1px solid var(--borderGameBorder);
+    border-bottom: 0px solid var(--borderGameBorder); 
+}
+.shopImg {
+    width: 45%;
+}
+.priceSlot {
+    width: 120px;
+    height: 20px;
+    color: var(--txt-subtitle);
+    background: var(--shopSlotPrice);
+    border: 1px solid var(--borderGameBorder);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.priceSlot h1 {
+    font-size: 12px;
+}
+#iconToken {
+    width: 12px;
+    margin-right: 4%;
+    margin-top: -1%;
+}
+
+/* MENU PLAY */
+.selectMenuGame {
+    gap: 10px;
+}
+.btnSelectMenuGame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 50px;
+    background: var(--shopSlotItem);
+    border-radius: 8px;
+}
+
+/* INVENTORY MODAL */
+.playInvetory{
+    width: 350px;
+    height: 559px;
+}
+.playInvetoryContent {
+    gap: 15px;
+}
+.menuInventorySelect {
+    gap: 40px;
+}
+.menuInventory{
+    background: var(--shopSlotItem);
+    padding: 15px 20px 15px 20px;
+    gap: 10px;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 9.0);
+}
+#menuInventory1{
+    display: none;
+}
+#menuInventory2{
+    display: none;
+}
+.playInvetorySlots {
+    display: flex;
+    justify-content: center; /* Centraliza os slots na linha */
+    gap: 20px; /* Espaço entre os slots */
+    width: 100%; /* Ocupa toda a largura disponível */
+}
+.playInvetorySlot {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    height: 90px;
+    background: var(--shopSlotItem);
+    border-radius: 8px;
+    border: 1px solid var(--borderGameBorder);
+    overflow: hidden;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 9.0);
+}
+
+.titleInvetorySlot {
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 20px;
+    background: var(--incomun-color);
+    border-bottom: 1px solid var(--borderGameBorder);
+}
+.titleInvetorySlot h1 {
+    font-size: 10px;
+    text-align: center;
+    color: var(--txt-title);
+}
+.imgSlotItemInventory {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 79%;
+}
+.imgSlotItemInventory img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    max-height: 60px;
+}
+.quantityItemSlot {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: -1px;
+    right: -1px;
+    width: 25px;
+    height: 25px;
+    background: var(--shopSlotPrice);
+    border-radius: 9px;
+}
+.quantityItemSlot h1 {
+    font-size: 10px;
+    text-align: center;
+    color: var(--txt-text);
+}
+
+/* PLAY MODAL */
+.playGameBoard {
+    height: 559px;
+}
+.top-gameboard {
+    width: 350px;
+    height: 5%;
+}
+.quantityItems {
+    width: 116.5px;
+    height: 48px;
+}
+.quantityItems input {
+    text-align: center;
+    border-color: transparent;
+    border-radius: 8px;
+    width: 40px;
+    outline: none;
+    text-decoration: none;
+}
+#quantityVasos {
+    margin-left: 4.2%;
+    width: 50px;
+}
+#quantityStar {
+    width: 50px;
+}
+#quantityAgua {
+    margin-left: 4%;
+    width: 40px;
+}
+#quantityFertilize {
+    margin-left: 4%;
+    width: 40px;
+}
+.inputIconHeight {
+    font-size: 10px;
+    height: 10px;
+    text-align: center;
+    justify-content: center;
+    align-self: center;
+}
+.iconTopGameBar {
+    width: 19px;
+}
+#iconTopGameBar2 { 
+    width: 24px; 
+
+} /* Correção icone*/
+#iconVaso {
+    margin-left: 10%;
+    max-height: 18px;
+    max-width: 18px;
+}
+#iconStar {
+    max-height: 20px;
+    max-width: 20px;
+}
+#btnConfigOpen {
+    margin-top: 1%;
+    margin-right: 7%;
+}
+
+
+.middle-gameboard {
+    height: 559px;
+    justify-content: space-between;
+}
+.gameBoardFarm {
+    width: 300px;
+}
+.vasosLayout {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os slots se movam para a linha seguinte quando não houver espaço */
+    justify-content: center; /* Alinha os slots no centro */
+    gap: 10px; /* Espaço entre os slots */
+}
+
+.plantSlot {
+    margin-top: 5px;
+    width: 100px;
+    height: 180px;
+    background: var(--trade-color);
+    border: 1px solid var(--borderGameBorder);
+    display: flex;
+    flex-direction: column; /* Alinha o nome da planta e fotos em coluna */
+    justify-content: space-between; /* Garante que a foto e o nome fiquem distribuídos corretamente */
+}
+.plantName {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 13%;
+    background: var(--incomun-color);
+}
+.plantName h1 {
+    font-size: 11px;
+}
+.slotPhoto {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: 87%;
+}
+.plantPhoto {
+    width: 60px;
+    bottom: 0px;
+}
+.vasoPhoto {
+    width: 60px;
+    bottom: 0px;
+    cursor: url('../img/cursor/colher.png') 16 16, auto; /* Ponto de ancoragem no centro da imagem 32x32px */
+}
+.plantTimer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    width: 100px;
+    height: 35px;
+    background: var(--shopSlotItem);
+    border: 1px solid var(--borderGameBorder);
+    font-size: 12px;
+    /* cursor: url('../img/lupa.png') 16 16, auto; */
+}
+.plantSlot, .plantTimer {
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+
+/* SWAP MODAL */
+.swapCryptoToken {
+    width: 277px;
+    height: 244px;
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 8px;
+    margin-bottom: 5%;
+}
+.swapTokenCrypto{
+    width: 277px;
+    height: 244px;
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 8px;
+}
+#labelTitle {
+    color: var(--txt-text);
+}
+.btnConfirmSwap {
+    margin-top: 5%;
+    margin-bottom: 2%;
+}
+#walletBalanceCryptoDeposit, #walletBalanceCryptoSaque {
+    text-align: center;
+    width: 100px;
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 3px;
+    outline: none;
+}
+.tradePool img{
+    width: 15px;
+    margin-right: 2px;
+}
+#balanceTokenSwap {
+    text-align: center;
+    width: 100px;
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 3px;
+    outline: none;
+}
+.infoCardSwapCT, .infoCardSwapTC {
+    margin-top: 10px;
+}
+.plantMascote, .gnomoMascote {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start; /* Alinha tudo no topo */
+    width: 100%;
+}
+.plantMascote img, .gnomoMascote img {
+    display: flex;
+    width: 50px;
+    margin-left: 10px;
+}
+.falaMascoteBallon {
+    position: relative;
+    margin-left: 10px;
+    display: flex;
+    align-items: flex-start;
+    width: 166px;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: falaBallonIn 0.4s forwards;
+}
+
+@keyframes falaBallonIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.falaMascote {
+    background: #fff;
+    color: #333;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 12px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+
+    max-width: 180px;
+}
+
+.falaMascoteBallon::before {
+    content: "";
+    position: absolute;
+    left: -2px;         /* Ajuste para alinhar à esquerda do balão */
+    bottom: -6px;      /* Coloca o triângulo abaixo do balão */
+    border-width: 0 10px 18px 10px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
+    transform: rotate(100deg);
+}
+.falaMascote p {
+    width: 100%;
+}
+/* FIM MODAL BASE*/
+
+
+/* FIM MIDDLE */
+
+
+
+
+/* DOWN */
+.down {
+    display: none;
+    max-height: 7%;
+    min-height: 7%;
+}
+.shop {
+    height: 100%;
+    /* background: var(--shop-color); */
+    border: 1px solid var(--borderGameBorder);
+    border-bottom-left-radius: 8px;
+}
+.shop img {
+    width: 25%;
+}
+.play {
+    height: 100%;
+    /* background: var(--play-color); */
+    border: 1px solid var(--borderGameBorder);
+}
+.play img {
+    width: 25%;
+}
+.trade {
+    height: 100%;
+    /* background: var(--trade-color); */
+    border: 1px solid var(--borderGameBorder);
+    border-bottom-right-radius: 8px;
+}
+.trade img{
+    width: 25%;
+}
+/* FIM DOWN */
+
+/* FIM GAMEBOARD */
+
+
+/* ANIMAÇÕES */
+.pointer {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.pointer:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+
+/* Vaso */
+.pointer2 {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+.pointer2:hover {
+    /* transform: scale(1.1); */
+    filter: brightness(1.2);
+}
+/* FIM ANIMAÇÕES */
+
+
+
+/* Responsivo para tablet */
+@media (max-width: 650px) {
+    .gameSceen, .middle, #walletModal, #startScreen {
+        width: 100vw;
+        height: 100vh;
+    }
+    #configModal, #shopModal, 
+    #playModal, #playMenuOpen, #playGameBoard, #playInvetory, 
+    #shopMenuModal, #subShopModal, #tradeModal {
+        width: 100vw;
+        height: 86vh;
+    }
+    .top-gameboard {
+        width: 100vw;
+        justify-content: space-between;
+    }
+    .config img {
+        width: min(15%, 80px);
+    }
+    #btnShopMenu, #btnPlayMenu, #btnTradeOpen {
+        width: min(15%, 80px);
+    }
+    #btnWalletConnect {
+        margin-top: 32vh;
+    }
+    #btnWalletConnect h1 {
+        font-weight: 400;
+        font-size: 20px;
+    }
+    #btnWalletDisconnect {
+        width: min(5%, 40px);
+    }
+}
+

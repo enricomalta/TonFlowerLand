@@ -1,0 +1,236 @@
+{
+  "Vaso": {
+    "en": "Pot",
+    "es": "Maceta",
+    "fr": "Pot",
+    "de": "Blumentopf"
+  },
+  "Regador": {
+    "en": "Watering Can",
+    "es": "Regadera",
+    "fr": "Arrosoir",
+    "de": "Gießkanne"
+  },
+  "Fertilizante": {
+    "en": "Fertilizer",
+    "es": "Fertilizante",
+    "fr": "Engrais",
+    "de": "Dünger"
+  },
+  "Anti-Parasitas": {
+    "en": "Pesticide",
+    "es": "Antiparasitario",
+    "fr": "Antiparasitaire",
+    "de": "Pestizid"
+  },
+  "Jasmim Amarelo": {
+    "en": "Yellow Jasmine",
+    "es": "Jazmín Amarillo",
+    "fr": "Jasmin Jaune",
+    "de": "Gelber Jasmin"
+  },
+  "Plumeria": {
+    "en": "Plumeria",
+    "es": "Plumeria",
+    "fr": "Pluméria",
+    "de": "Frangipani"
+  },
+  "Margarida Feliz": {
+    "en": "Happy Daisy",
+    "es": "Margarita Feliz",
+    "fr": "Marguerite Joyeuse",
+    "de": "Fröhliche Gänseblümchen"
+  },
+  "Gerbera": {
+    "en": "Gerbera",
+    "es": "Gerbera",
+    "fr": "Gerbéra",
+    "de": "Gerbera"
+  },
+  "Hibisco": {
+    "en": "Hibiscus",
+    "es": "Hibisco",
+    "fr": "Hibiscus",
+    "de": "Hibiskus"
+  },
+  "Botão de Ouro": {
+    "en": "Buttercup",
+    "es": "Botón de Oro",
+    "fr": "Renoncule",
+    "de": "Hahnenfuß"
+  },
+  "Violeta": {
+    "en": "Violet",
+    "es": "Violeta",
+    "fr": "Violette",
+    "de": "Veilchen"
+  },
+  "Margarida": {
+    "en": "Daisy",
+    "es": "Margarita",
+    "fr": "Marguerite",
+    "de": "Gänseblümchen"
+  },
+  "Rosa lilás": {
+    "en": "Lilac Rose",
+    "es": "Rosa Lila",
+    "fr": "Rose Lilas",
+    "de": "Fliederrose"
+  },
+  "Aster": {
+    "en": "Aster",
+    "es": "Áster",
+    "fr": "Aster",
+    "de": "Aster"
+  },
+  "Cerejeira": {
+    "en": "Cherry Tree",
+    "es": "Cerezo",
+    "fr": "Cerisier",
+    "de": "Kirschblüte"
+  },
+  "Girassol": {
+    "en": "Sunflower",
+    "es": "Girasol",
+    "fr": "Tournesol",
+    "de": "Sonnenblume"
+  },
+  "Anemona": {
+    "en": "Anemone",
+    "es": "Anémona",
+    "fr": "Anémone",
+    "de": "Anemone"
+  },
+  "Aurora Rosa": {
+    "en": "Pink Aurora",
+    "es": "Aurora Rosa",
+    "fr": "Aurore Rose",
+    "de": "Rosa Aurora"
+  },
+  "Rosa Feliz": {
+    "en": "Happy Rose",
+    "es": "Rosa Feliz",
+    "fr": "Rose Joyeuse",
+    "de": "Fröhliche Rose"
+  },
+  "Hibisco Azul": {
+    "en": "Blue Hibiscus",
+    "es": "Hibisco Azul",
+    "fr": "Hibiscus Bleu",
+    "de": "Blauer Hibiskus"
+  },
+  "Celestina": {
+    "en": "Celestina",
+    "es": "Celestina",
+    "fr": "Célestine",
+    "de": "Celestina"
+  },
+  "Desconhecido": {
+    "en": "Unknown",
+    "es": "Desconocido",
+    "fr": "Inconnu",
+    "de": "Unbekannt"
+  },
+  "Configurações": {
+    "en": "Settings",
+    "es": "Configuración",
+    "fr": "Paramètres",
+    "de": "Einstellungen"
+  },
+  "Wallet:": {
+    "en": "Wallet:",
+    "es": "Billetera:",
+    "fr": "Portefeuille :",
+    "de": "Brieftasche:"
+  },
+  "Som da Música": {
+    "en": "Music Sound",
+    "es": "Sonido de Música",
+    "fr": "Son de la Musique",
+    "de": "Musiklautstärke"
+  },
+  "Som de Efeitos": {
+    "en": "Effects Sound",
+    "es": "Sonido de Efectos",
+    "fr": "Son des Effets",
+    "de": "Effektgeräusche"
+  },
+  "Som do Cursor": {
+    "en": "Cursor Sound",
+    "es": "Sonido del Cursor",
+    "fr": "Son du Curseur",
+    "de": "Mauszeiger-Ton"
+  },
+  "Save!": {
+    "en": "Save!",
+    "es": "Guardar!",
+    "fr": "Sauvegarder !",
+    "de": "Speichern!"
+  },
+  "Informações": {
+    "en": "Information",
+    "es": "Información",
+    "fr": "Informations",
+    "de": "Informationen"
+  },
+  "Sim! 👍🏻": {
+    "en": "Yes! 👍🏻",
+    "es": "¡Sí! 👍🏻",
+    "fr": "Oui ! 👍🏻",
+    "de": "Ja! 👍🏻"
+  },
+  "Não! 👎🏻": {
+    "en": "No! 👎🏻",
+    "es": "¡No! 👎🏻",
+    "fr": "Non ! 👎🏻",
+    "de": "Nein! 👎🏻"
+  },
+  "Sementes": {
+    "en": "Seeds",
+    "es": "Semillas",
+    "fr": "Graines",
+    "de": "Samen"
+  },
+  "Vasos": {
+    "en": "Pots",
+    "es": "Macetas",
+    "fr": "Pots",
+    "de": "Töpfe"
+  },
+  "Combinar": {
+    "en": "Combine",
+    "es": "Combinar",
+    "fr": "Combiner",
+    "de": "Kombinieren"
+  },
+  "Acessórios": {
+    "en": "Accessories",
+    "es": "Accesorios",
+    "fr": "Accessoires",
+    "de": "Zubehör"
+  },
+  "Vazio": {
+    "en": "Empty",
+    "es": "Vacío",
+    "fr": "Vide",
+    "de": "Leer"
+  },
+  "Deposite:": {
+    "en": "Deposit:",
+    "es": "Depositar:",
+    "fr": "Déposer :",
+    "de": "Einzahlen:"
+  },
+  "Receba:": {
+    "en": "Receive:",
+    "es": "Recibir:",
+    "fr": "Recevoir :",
+    "de": "Erhalten:"
+  },
+  "Saque:": {
+    "en": "Withdraw:",
+    "es": "Retirar:",
+    "fr": "Retrait :",
+    "de": "Auszahlen:"
+  }
+}

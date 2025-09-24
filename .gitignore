@@ -1,0 +1,11 @@
+serviceAccountKey.json
+vercel.json
+.vercel
+.env
+.mypy_cache
+.vscode
+smart/
+/ssl
+/bot
+/node_modules
+register-items.js
