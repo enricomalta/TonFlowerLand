@@ -502,7 +502,7 @@ plantVaso(); // Adiciona evento de click para plantar no vaso
 startMusic();
 attachVolumeListeners();
 loadVolumeSettings();
-autoUpdate(); // Inicia o auto-update da UI
+// autoUpdate(); // Inicia o auto-update da UI
 
 //#region Button Events
 // Aguardar o carregamento do DOM para inicializar a funcionalidade
