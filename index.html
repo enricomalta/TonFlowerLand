@@ -10,9 +10,25 @@
     <audio id="fxAudio" src="sounds/recolher.mp3"></audio>
     <audio id="cursorAudio" src="sounds/cursor1.mp3"></audio>
 
-    <!-- <script type="module" src="js/front-end/walletConnect.js"></script> -->
+    <script type="module" src="js/front-end/web3/walletConnect.js"></script>
     <script type="module" src="js/front-end/index.js"></script>
     <script type="module" src="js/front-end/api.js"></script>
+
+    <script type="module" src="js/front-end/security/pegaTrouxa.js"></script>
+    <script type="module" src="js/front-end/security/block.js"></script>
+    <!-- <script type="module" src="js/front-end/security/antiCheat.js"></script>
+    <script type="module" src="js/front-end/security/antiBot.js"></script>
+    <script type="module" src="js/front-end/security/antiDebug.js"></script> -->
+
+
+    <script type="module" src="js/front-end/ui/hud.js"></script>
+    <script type="module" src="js/front-end/ui/modal-hook.js"></script>
+    <script type="module" src="js/front-end/ui/sound.js"></script>
+
+    <script type="module" src="js/front-end/ui/swapScreen.js"></script>
+
+    <script type="module" src="js/front-end/lang/translate.js"></script>
+
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <title>Tonflower Land</title>
@@ -88,13 +104,14 @@
 
                 <!-- Modal Configurações -->
                 <div id="configModal" class="flex column">
+                    
                     <div class="web3 column center-x">
                         <div class="web3-top row center-x">
-                            <div class="web3-title">Configurações</div>
+                            <div class="web3-title" data-translate="Configurações"></div>
                             <!-- <button class="pointer close-btn-right" id="btnConfigClose">X</button> -->
                         </div>
                         <div class="web3-down column">
-                            <div class="web3-endereco">Wallet:</div>
+                            <div class="web3-endereco" data-translate="Wallet:"></div>
                             <div class="web3-adress">
                                 <input class="input2" type="text" id="adressInput" readonly>
                                 <img class="disconnectWallet pointer" src="img/sair.png" id="btnWalletDisconnect">
@@ -107,7 +124,7 @@
 
                         <div class="soundMusic flex column center-x">
                             <div class="row">
-                                <span class="soundTxt"> Som da Música</span>
+                                <span class="soundTxt" data-translate="Som da Música"></span>
                                 <img class="pointer volumeMuteImg" src="img/volumeMax.png" id="toggleMuteMusic" onclick="toggleMute('music')">
                             </div>
                             <input type="range" id="musicVolume" value="100" max="100" step="1">
@@ -115,7 +132,7 @@
 
                         <div class="soundFx flex column center-x">
                             <div class="row">
-                                <span class="soundTxt"> Som de Efeitos</span>
+                                <span class="soundTxt" data-translate="Som de Efeitos"></span>
                                 <img class="pointer volumeMuteImg" src="img/volumeMax.png" id="toggleMuteFx" onclick="toggleMute('fx')">
                             </div>
                             <input type="range" id="fxVolume" value="100" max="100" step="1">
@@ -123,14 +140,54 @@
 
                         <div class="soundCursor flex column center-x">
                             <div class="row">
-                                <span class="soundTxt"> Som do Cursor</span>
+                                <span class="soundTxt" data-translate="Som do Cursor"></span>
                                 <img class="pointer volumeMuteImg" src="img/volumeMax.png" id="toggleMuteCursor" onclick="toggleMute('cursor')">
                             </div>
                             <input type="range" id="cursorVolume" value="100" max="100" step="1">
                         </div>
 
+                    </div>
+
+                    <div class="lang-display column center-x">
+                        <div class="lang-component">
+                            <div class="lang-options row" id="lang-options1">
+                                <div class="flag pointer" id="flag1"><img src="./img/country/flag1.png"></div>
+                                <div class="flag pointer" id="flag2"><img src="./img/country/flag2.png"></div>
+                                <div class="flag pointer" id="flag3"><img src="./img/country/flag3.png"></div>
+                                <div class="flag pointer" id="flag4"><img src="./img/country/flag4.png"></div>
+                                <div class="flag pointer" id="flag5"><img src="./img/country/flag5.png"></div>
+
+                            </div>
+                            <div class="lang-options row">
+                                <div class="flag pointer" id="flag6"><img src="./img/country/flag6.png"></div>
+                                <div class="flag pointer" id="flag7"><img src="./img/country/flag7.png"></div>
+                                <div class="flag pointer" id="flag8"><img src="./img/country/flag8.png"></div>
+                                <div class="flag pointer" id="flag9"><img src="./img/country/flag9.png"></div>
+                                <div class="flag pointer" id="flag10"><img src="./img/country/flag10.png"></div>
+
+                            </div>
+                            <div class="lang-options row">
+                                <div class="flag pointer" id="flag11"><img src="./img/country/flag11.png"></div>
+                                <div class="flag pointer" id="flag12"><img src="./img/country/flag12.png"></div>
+                                <div class="flag pointer" id="flag13"><img src="./img/country/flag13.png"></div>
+                                <div class="flag pointer" id="flag14"><img src="./img/country/flag14.png"></div>
+                                <div class="flag pointer" id="flag15"><img src="./img/country/flag15.png"></div>
+
+                            </div>
+                            <div class="lang-options row">
+                                <div class="flag pointer" id="flag16"><img src="./img/country/flag16.png"></div>
+                                <div class="flag pointer" id="flag17"><img src="./img/country/flag17.png"></div>
+                                <div class="flag pointer" id="flag18"><img src="./img/country/flag18.png"></div>
+                                <div class="flag pointer" id="flag19"><img src="./img/country/flag19.png"></div>
+                                <div class="flag pointer" id="flag20"><img src="./img/country/flag20.png"></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="center-x wd-100p">
                         <div class="btn-save-cofig">
-                            <button class="pointer" id="btnSaveConfig">Save!</button>
+                            <button class="pointer" id="btnSaveConfig" data-translate="Save!"></button>
                         </div>
                     </div>
                     
@@ -142,8 +199,8 @@
                     <div class="shopMenuModal" id="shopMenuModal">
 
                         <div class="selectMenuGame column flex center-x">
-                            <div class="btnSelectMenuGame pointer" id="">Market</div>
-                            <div class="btnSelectMenuGame pointer" id="btnShopOpen">Shop</div>
+                            <div class="btnSelectMenuGame pointer" id="" data-translate="Market">Market</div>
+                            <div class="btnSelectMenuGame pointer" id="btnShopOpen" data-translate="Shop">Shop</div>
                         </div>
 
                     </div>
@@ -489,6 +546,17 @@
                         <button class="btn-x-inspect pointer">X</button>
                     </div>
 
+                    <!-- 0. Modal Info Vaso -->
+                    <div class="modalInformationVaso" id="modalInformationVaso">
+                        <div class="title">
+                            <h1>Informações</h1>
+                        </div>
+                        <p id="modalMessageVaso"></p>
+                        <div class="modalVasoActions row" id="modalVasoActions" style="display: flex; flex-direction: row; justify-content: center; align-items: center; gap: 10px">
+                                <button class="btn-x-vaso pointer">X</button>
+                        </div>
+                    </div>
+
                     <!-- 0. Modal de Confirmação Planta -->
                     <div class="modalInformation" id="modalInformation">
                         <p id="modalMessage"></p>
@@ -496,13 +564,19 @@
                         <button class="btn-nao">Não! 👎🏻</button>
                     </div>
 
+                    <!-- 0. Modal de Informação -->
+                    <div class="modalInformationUtility" id="modalInformationUtility">
+                        <p id="modalMessageUtility"></p>
+                        <button class="btn-x-inspect2 pointer">X</button>
+                    </div>
+
                     <!-- 1. Menu Inventario/Jogar/Combinar -->
                     <div class="playMenuOpen column center-x" id="playMenuOpen">
 
                         <div class="selectMenuGame column flex center-x">
-                            <div class="btnSelectMenuGame pointer" id="btnInventoryOpen">Sementes</div>
-                            <div class="btnSelectMenuGame pointer" id="btnPlayOpen">Vasos</div>
-                            <div class="btnSelectMenuGame btnCraft pointer" id="btnCraft">Combinar</div>
+                            <div class="btnSelectMenuGame pointer" id="btnInventoryOpen" data-translate="Sementes">Sementes</div>
+                            <div class="btnSelectMenuGame pointer" id="btnPlayOpen" data-translate="Vasos">Vasos</div>
+                            <div class="btnSelectMenuGame btnCraft pointer" id="btnCraft" data-translate="Combinar">Combinar</div>
                         </div>
                     
                     </div>
@@ -522,7 +596,7 @@
 
                             <!-- MENU UTILITARIOS  -->
                             <div class="menuInventorySelect center-x row">
-                                <div class="menuInventory pointer " id="menuInventory2">Acessórios</div>
+                                <div class="menuInventory pointer " id="menuInventory2" data-translate="Acessórios">Acessórios</div>
                             </div>
                             
                             <!-- Slots 1/2 -->
@@ -875,28 +949,28 @@
                                     <div class="slotVasos column" id="slotVasos1">
                                         <div class="plantSlot" id="plantSlot1">
                                             <div class="plantName" id="plantSlotName1">
-                                                <h1 id="plantName1">Vazio</h1>
+                                                <h1 id="plantName1" data-translate="Vazio"></h1>
                                             </div>
                                             <div class="slotPhoto">
                                                 <img class="plantPhoto pointer2" id="plantPhoto1" src="">
                                                 <img class="vasoPhoto pointer2" id="vasoPhoto1" src="/img/play/x.png">
                                             </div>
                                         </div>
-                                        <div class="plantTimer" id="plantTimer1"></div>
+                                        <div class="plantTimer" id="plantTimer1" data-translate=""></div>
                                     </div>
 
                                     <!-- Vaso Slot 2 -->
                                     <div class="slotVasos column" id="slotVasos2">
                                         <div class="plantSlot" id="plantSlot2">
                                             <div class="plantName" id="plantSlotName2">
-                                                <h1 id="plantName2">Vazio</h1>
+                                                <h1 id="plantName2" data-translate="Vazio"></h1>
                                             </div>
                                             <div class="slotPhoto">
                                                 <img class="plantPhoto pointer2" id="plantPhoto2" src="/img/plant/0.png">
                                                 <img class="vasoPhoto pointer2" id="vasoPhoto2" src="/img/play/x.png">
                                             </div>
                                         </div>
-                                        <div class="plantTimer" id="plantTimer2">
+                                        <div class="plantTimer" id="plantTimer2" data-translate="">
                                             <h1 id="plantTimer2"></h1>
                                         </div>
                                     </div>
@@ -910,7 +984,7 @@
                                     <div class="slotVasos column" id="slotVasos3">
                                         <div class="plantSlot" id="plantSlot3">
                                             <div class="plantName" id="plantSlotName3">
-                                                <h1 id="plantName3">Vazio</h1>
+                                                <h1 id="plantName3" data-translate="Vazio"></h1>
                                             </div>
                                             <div class="slotPhoto">
                                                 <img class="plantPhoto pointer2" id="plantPhoto3" src="/img/plant/0.png">
@@ -918,7 +992,7 @@
                                             </div>
                                         </div>
                                         <div class="plantTimer" id="plantTimer3">
-                                            <h1 id="plantTimer3"></h1>
+                                            <h1 id="plantTimer3" data-translate=""></h1>
                                         </div>
                                     </div>
 
@@ -926,14 +1000,14 @@
                                     <div class="slotVasos column" id="slotVasos4">
                                         <div class="plantSlot" id="plantSlot4">
                                             <div class="plantName" id="plantSlotName">
-                                                <h1 id="plantName4">Vazio</h1>
+                                                <h1 id="plantName4" data-translate="Vazio"></h1>
                                             </div>
                                             <div class="slotPhoto">
                                                 <img class="plantPhoto pointer2" id="plantPhoto4" src="/img/plant/0.png">
                                                 <img class="vasoPhoto pointer2" id="vasoPhoto4" src="/img/play/x.png">
                                             </div>
                                         </div>
-                                        <div class="plantTimer" id="plantTimer4"></div>
+                                        <div class="plantTimer" id="plantTimer4" data-translate=""></div>
                                     </div>
                                 </div>
 
@@ -953,38 +1027,154 @@
                 </div>
 
                 <!-- Modal Trade -->
-                <div id="tradeModal" class="column center-x">
-
-                    <div class="swapCryptoToken column center-x">
-                        <div class="walletBalanceCrypto column">
-                            <label id="labelTitle">Deposite:</label>
-                            <input type="text" id="walletBalanceCrypto" placeholder="Min: 0.5 Ton">
-                        </div>
-                        <div class="btnConfirmSwap">
-                            <button id="btnConfirmSwapCT">Confirm</button>
-                        </div>
-                        <div class="balanceTokenSwap column">
-                            <label id="labelTitle">Receba:</label>
-                            <input type="text" id="balanceTokenSwap" placeholder="">
-                        </div>
-                        <div class="infoCardSwapCT"></div>
+                <div id="tradeModal" class="">
+                    
+                    <!-- Trade Menu -->
+                    <div class="tradeMenuOpen column center-x" id="tradeMenuOpen">
+                        <div class="selectMenuGame column flex center-x">
+                            <div class="btnSelectMenuGame pointer" id="btnSwapOpen" data-translate="Trocar">Trocar</div>
+                            <div class="btnSelectMenuGame pointer" id="btnLiquidityOpen" data-translate="Historico">Historico</div>
+                        </div> 
                     </div>
 
-                    <div class="swapTokenCrypto column center-x">
-                        <div class="walletBalanceToken column">
-                            <label id="labelTitle">Saque:</label>
-                            <input type="text" id="walletBalanceCrypto" placeholder="Min: 1 Token">
+                    <!-- Tela Token / Crypto -->
+                    <div class="tradeSwap column center-x" id="tradeSwap">
+                        
+                        <!-- Tela Crypto / Token -->
+                        <div class="swapCryptoToken column center-x">
+                            <div class="plantMascote row">
+                                <img src="img/ui/planta.png" id="plantMascote">
+                                <div class="falaMascoteBallon" id="falaMascoteBallon2">
+                                    <div class="falaMascote">
+                                        <p id="falaMascoteTextPlanta"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="walletBalanceCrypto column">
+                                <label id="labelTitle" data-translate="Deposite:">Deposite:</label>
+                                <input type="number" id="walletBalanceCryptoDeposit" placeholder="Min: 1.0 Ton">
+                            </div>
+                            <div class="btnConfirmSwap">
+                                <button id="btnConfirmSwapCT" data-translate="Confirm">Confirm</button>
+                            </div>
+                            <div class="balanceTokenSwap column">
+                                <label id="labelTitle" data-translate="Receba:">Receba:</label>
+                                <input type="text" id="balanceTokenSwap" placeholder="" value="0.00">
+                            </div>
+                            <div class="infoCardSwapCT">
+                                <div class="tradePool row center-x">
+                                    <img src="img/ui/sun.png">
+                                    <label id="labelTitle">Pool: 0</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="btnConfirmSwap">
-                            <button id="btnConfirmSwapTC">Confirm</button>
+
+                        <!-- Tela Token / Crypto -->
+                        <div class="swapTokenCrypto column center-x">
+                            <div class="gnomoMascote row">
+                                <img src="img/ui/gnomo.png" id="gnomoMascote">
+                                    <div class="falaMascoteBallon" id="falaMascoteBallon">
+                                    <div class="falaMascote">
+                                        <p id="falaMascoteTextGnomo"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="walletBalanceToken column">
+                                <label id="labelTitle" data-translate="Saque:">Saque:</label>
+                                <input type="number" id="walletBalanceCryptoSaque" placeholder="Min: 1.0 Ton">
+                            </div>
+                            <div class="btnConfirmSwap">
+                                <button id="btnConfirmSwapTC" data-translate="Confirm">Confirm</button>
+                            </div>
+                            <div class="balanceCryptoSwap column">
+                                <label id="labelTitle" data-translate="Receba:">Receba:</label>
+                                <input type="text" id="balanceTonSwap" placeholder="" value="0.00">
+                            </div>
+                            <div class="infoCardSwapTC">
+                                <div class="tradePool row center-x">
+                                    <img src="img/ui/ton.png">
+                                    <label id="labelTitle">Pool: 0</label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="balanceCryptoSwap column">
-                            <label id="labelTitle">Receba:</label>
-                            <input type="text" id="balanceTokenSwap" placeholder="">
+
+                    </div> 
+
+                    <!-- Tela Historico Trade -->
+                    <div class="tradeHistorico column center-x" id="tradeHistorico">
+
+                        <!-- Trade Menu Historico Select -->
+                        <div class="historicoMenuOpen column center-x" id="historicoMenuOpen">
+                            <div class="selectMenuGame column flex center-x">
+                                <div class="btnSelectMenuGame pointer" id="btnHistoricoDepositOpen" data-translate="Deposito">Deposito</div>
+                                <div class="btnSelectMenuGame pointer" id="btnHistoricoSaqueOpen" data-translate="Saque">Saque</div>
+                            </div> 
                         </div>
-                        <div class="infoCardSwapTC"></div>
-                    </div>
+
+
+                        <!-- HISTÓRICO DE TROCAS CRYPTO -->
+                        <div class="historicoListCrypto column" id="historicoListCrypto">
+
+                            <!-- Tela Crypto / Token Historico -->
+                            <div class="historyCryptoToken column center-x" id="historyCryptoToken">
+                                
+                                <!-- Mascote Row -->
+                                <div class="plantMascote row" id="plantMascoteHistory">
+                                    <img src="img/ui/planta.png" id="plantMascote">
+                                    
+                                    <div class="falaMascoteBallon" id="falaMascoteBallon2">
+                                        <div class="falaMascote">
+                                            <p id="falaMascoteTextPlanta"></p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Historico Depositos Recentes -->
+                                <div class="historicoDepositCrypto column center-x">
+                                    <h1 id="historicoDepositCryptoTitle" data-translate="Depósitos Recentes">Depósitos Recentes</h1>
+                                    <div class="historicoListContent column" id="historicoListContentCrypto">
+                                        <!-- Conteudo Dinamico JS -->
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- HISTÓRICO DE TROCAS TOKEN -->
+                        <div class="historicoListToken column none" id="historicoListToken">
+
+                            <!-- Tela Token / Crypto Historico -->
+                            <div class="historyTokenCrypto column center-x" id="historyTokenCrypto">
+                                
+                                <!-- Mascote Row -->
+                                <div class="gnomoMascote row" id="gnomoMascoteHistory">
+                                    <img src="img/ui/goblin.png" id="gnomoMascote">
+                                        <div class="falaMascoteBallon" id="falaMascoteBallon">
+                                        <div class="falaMascote">
+                                            <p id="falaMascoteTextGnomo"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Histórico de Saques Recentes -->
+                                <div class="historicoSaqueCrypto column center-x">
+                                    <h1 id="historicoSaqueCryptoTitle" data-translate="Saques Recentes">Saques Recentes</h1>
+                                    <div class="historicoListContent column" id="historicoListContentToken">
+                                        <!-- Conteudo Dinamico JS -->
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div> 
+                    
                 </div>
+
 
 
             </div>
@@ -1007,12 +1197,9 @@
 
     </div>
 
-    <script src="js/front-end/volume.js"></script>
-    <!-- <script type="module" src="js/front-end/pegaTrouxa.js"></script> -->
-
-
     <script src="https://unpkg.com/@tonconnect/sdk@latest/dist/tonconnect-sdk.min.js"></script>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand(); // Expande para tela cheia

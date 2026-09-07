@@ -39,6 +39,13 @@
     -webkit-user-drag: none; /* Impede arrastar imagens no Chrome/Safari */
     -webkit-touch-callout: none; /* Remove o menu de contexto em dispositivos móveis */
 }
+
+body, html {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: none !important; /* Remove qualquer fundo */
+}
 /* ARQUITETURA DO GRID FLEX-BOX */
 .column {
     display: flex;
@@ -118,7 +125,7 @@
 }
 .gameSceen {
     width: 350px;
-    min-height: 650px;
+    min-height: 640px;
 }
 
 img {
@@ -142,6 +149,7 @@ img:focus {
 }
 .coins {
     width: 100%;
+    align-items: flex-start;
 }
 .criptoNumber img {
     margin-left: 12.25px;
@@ -161,7 +169,7 @@ img:focus {
     text-decoration: none;
 }
 .coinNumber img {
-    margin-left: 8%;
+    margin-left: 12.25px;
     width: 18px;
 }
 .coinNumber {
@@ -219,6 +227,16 @@ img:focus {
     border-top: 0px solid transparent;
     border-bottom: 0px solid transparent;
 }
+.overlay {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
 .modalInformation {
     display: none; /* Oculto por padrão */
     position: fixed;
@@ -235,16 +253,6 @@ img:focus {
     padding: 15px;
     text-align: center;
     z-index: 1000;
-}
-.overlay {
-    display: none; /* Oculto por padrão */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
 }
 .modalInformation button {
     margin: 10px;
@@ -279,16 +287,6 @@ img:focus {
     text-align: center;
     z-index: 1000;
 }
-.overlay {
-    display: none; /* Oculto por padrão */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-}
 .modalInformationInspect button {
     margin-top: 10px;
     padding: 8px 15px;
@@ -301,16 +299,101 @@ img:focus {
     background-color: #28a745;
     color: white;
 }
+.btn-x-inspect2 {
+    background-color: #28a745;
+    color: white;
+}
+
+.modalInformationVaso {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 120px;
+    background: var(--shopSlotPrice);
+    color: var(--txt-text);
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    text-align: center;
+    z-index: 1000;
+}
+.modalInformationVaso button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
 
 
+
+
+.modalInformationUtility {
+    display: none; /* Oculto por padrão */
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 70px;
+    background: var(--shopSlotPrice);
+    color: var(--txt-text);
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    text-align: center;
+    z-index: 1000;
+}
+.modalInformationUtility button {
+    margin: 15px;
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+
+
+
+
+.input-tempo-restante {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    color: var(--txt-text);
+    outline: none;
+    width: 200px;
+}
+.btn-remove-parasita {
+    background: #e74c3c;
+    color: #ffffff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.btn-x-vaso {
+    background-color: #28a745;
+    color: white;
+}
 
 /* MODAL BASE*/
 #walletModal {
     display: flex;
     flex-direction: column;
-    position: absolute;
+    position: fixed;
     width: 350px;
-    height: 559px;
+    height: 655px;
     background: var(--wallet-color);
 }
 #configModal {
@@ -340,9 +423,18 @@ img:focus {
 }
 #tradeModal {
     display: none;
+    justify-content: center;
     background: var(--trade-color);
     width: 350px;
     height: 559px;
+}
+#tradeMenuOpen {
+    display: none;
+    background: var(--trade-color);
+    width: 348px;
+    /* height: 559px; */
+    /* border-left: 1px solid var(--borderGameBorder);
+    border-right: 1px solid var(--borderGameBorder); */
 }
 #playMenuOpen {
     display: none;
@@ -362,6 +454,7 @@ img:focus {
 }
 #playInvetory {
     display: none;
+    justify-content: space-between;
     /* background: var(--play-color); */
     width: 348px;
     height: 559px;
@@ -384,14 +477,14 @@ img:focus {
 /* CONFIG MODAL */
 #startScreen {
     width: 350px;
-    height: 650px;
+    height: 655px;
 }
 .btnWallet {
     display: flex;
     justify-content: center;
     align-items: center;
     position: absolute;
-    margin-top: 70%;
+    margin-top: 250px;
     width: 100px;
     height: 60px;
     border: 1px solid var(--borderGameBorder);
@@ -408,9 +501,9 @@ img:focus {
     transform: scale(1.05);
 }
 .btnWallet h1 {
-    font-size: 12px;
+    font-weight: 400;
+    font-size: 20px;
     text-align: center;
-    font-weight: bold;
     text-align: center;
     transition: transform 0.2s;
     color: var(--txt-text);
@@ -460,7 +553,7 @@ img:focus {
     margin-left: 4%;
 }
 .soundConfig {
-    margin-top: 20%;
+    margin-top: 0%;
 }
 .soundMusic, .soundFx, .soundCursor {
     justify-items: center;
@@ -508,7 +601,6 @@ img:focus {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-    margin-top: 25px;
 }
 .btn-save-cofig button:hover {
     background: linear-gradient(135deg, #66BB6A, #388E3C);
@@ -519,6 +611,37 @@ img:focus {
     background: linear-gradient(135deg, #2E7D32, #1b4b1e);
     box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.3);
 }
+
+
+.lang-display {
+    /* border: 1px solid var(--borderGameBorder); */
+    margin-bottom: 20px;
+    border-radius: 8px;
+    color: var(--txt-text);
+}
+
+.lang-options {
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.flag img {
+    width: 40px;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+}
+
+#lang-options1 {
+    margin-top: 10%;
+}
+
+
+
+
 
 
 
@@ -702,7 +825,7 @@ img:focus {
 }
 .quantityItems {
     width: 116.5px;
-    height: 22px;
+    height: 48px;
 }
 .quantityItems input {
     text-align: center;
@@ -758,6 +881,7 @@ img:focus {
 
 .middle-gameboard {
     height: 559px;
+    justify-content: space-between;
 }
 .gameBoardFarm {
     width: 300px;
@@ -840,27 +964,137 @@ img:focus {
     border-radius: 8px;
 }
 #labelTitle {
-    margin-left: 2%;
     color: var(--txt-text);
 }
 .btnConfirmSwap {
     margin-top: 5%;
     margin-bottom: 2%;
 }
-#walletBalanceCrypto {
+#walletBalanceCryptoDeposit, #walletBalanceCryptoSaque {
     text-align: center;
     width: 100px;
     border: 1px solid var(--borderGameBorder);
     border-radius: 3px;
     outline: none;
 }
-#balanceTokenSwap {
+.tradePool img{
+    width: 15px;
+    margin-right: 2px;
+}
+#balanceTokenSwap, #balanceTonSwap {
     text-align: center;
     width: 100px;
     border: 1px solid var(--borderGameBorder);
     border-radius: 3px;
     outline: none;
 }
+.infoCardSwapCT, .infoCardSwapTC {
+    margin-top: 10px;
+}
+.plantMascote, .gnomoMascote {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start; /* Alinha tudo no topo */
+    width: 100%;
+}
+#plantMascoteHistory, #gnomoMascoteHistory {
+    margin-top: 7%;
+}
+.plantMascote img, .gnomoMascote img {
+    display: flex;
+    width: 50px;
+    margin-left: 10px;
+}
+.falaMascoteBallon {
+    position: relative;
+    margin-left: 10px;
+    display: flex;
+    align-items: flex-start;
+    width: 166px;
+    opacity: 0;
+    transform: scale(0.8);
+    animation: falaBallonIn 0.4s forwards;
+}
+
+@keyframes falaBallonIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.falaMascote {
+    background: #fff;
+    color: #333;
+    border-radius: 12px;
+    padding: 6px 12px;
+    font-size: 12px;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.15);
+
+    max-width: 180px;
+}
+
+.falaMascoteBallon::before {
+    content: "";
+    position: absolute;
+    left: -2px;         /* Ajuste para alinhar à esquerda do balão */
+    bottom: -6px;      /* Coloca o triângulo abaixo do balão */
+    border-width: 0 10px 18px 10px;
+    border-style: solid;
+    border-color: transparent transparent #fff transparent;
+    transform: rotate(100deg);
+}
+.falaMascote p {
+    width: 100%;
+}
+
+/* HISTÓRICO DE TROCAS MODAL */
+
+.historyCryptoToken {
+    width: 277px;
+    height: 495px;
+    border: 1px solid var(--borderGameBorder);
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 8px;
+
+}
+
+.historicoDepositCrypto h1 {
+    font-size: 18px;
+    color: var(--txt-text);
+    margin-bottom: 8px;
+}
+.historicoListContent {
+    overflow-y: auto;
+    width: 277px;
+    height: 382px;
+    border: 1px solid var(--borderGameBorder);
+    border-radius: 8px;
+    background: var(--trade-color);
+}
+
+
+/* Histórico de Saques Recentes */
+
+.historyTokenCrypto {
+
+    width: 277px;
+    height: 495px;
+    border: 1px solid var(--borderGameBorder);
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 8px;
+
+}
+
+.historicoSaqueCrypto h1 {
+    font-size: 18px;
+    color: var(--txt-text);
+    margin-bottom: 8px;
+}
+
+
 /* FIM MODAL BASE*/
 
 
@@ -871,6 +1105,7 @@ img:focus {
 
 /* DOWN */
 .down {
+    display: none;
     max-height: 7%;
     min-height: 7%;
 }
@@ -928,9 +1163,37 @@ img:focus {
 
 
 
+/* Responsivo para tablet */
 @media (max-width: 650px) {
-    /* .gameSceen {
+    .gameSceen, .middle, #walletModal, #startScreen {
         width: 100vw;
         height: 100vh;
-    } */
+    }
+    #configModal, #shopModal, 
+    #playModal, #playMenuOpen, #playGameBoard, #playInvetory, 
+    #shopMenuModal, #subShopModal, #tradeModal, #tradeSwap {
+        width: 100vw;
+        height: 86vh;
+    }
+    .top-gameboard {
+        width: 100vw;
+        justify-content: space-between;
+    }
+    .config img {
+        width: min(15%, 80px);
+    }
+    #btnShopMenu, #btnPlayMenu, #btnTradeOpen {
+        width: min(15%, 80px);
+    }
+    #btnWalletConnect {
+        margin-top: 32vh;
+    }
+    #btnWalletConnect h1 {
+        font-weight: 400;
+        font-size: 20px;
+    }
+    #btnWalletDisconnect {
+        width: min(5%, 40px);
+    }
 }
+
