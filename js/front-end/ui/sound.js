@@ -142,7 +142,7 @@ export function soundRecolherPlanta() {
     recolherSound.currentTime = 0;
     recolherSound.play().catch(error => console.warn("Erro ao reproduzir o som:", error));
 }
-// Recolher Sound
+// Inspect Sound
 export function soundInspectPlant() {
     const soundInspect = new Audio("sounds/fx2.mp3");
     soundInspect.volume = document.getElementById("fxAudio").volume;

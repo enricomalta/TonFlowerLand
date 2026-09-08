@@ -394,8 +394,8 @@ img:focus {
     display: none;
     background: var(--body-config);
     position: absolute;
-    width: 348px;
-    height: 557px;
+    width: 350px;
+    height: 559px;
 }
 #shopModal {
     display: none;
@@ -502,6 +502,14 @@ img:focus {
                 inset -2px -2px 8px rgba(255, 255, 255, 0.2);
     transform: scale(0.95);
 }
+
+.btnMute img {
+    position: absolute;
+    top: 15px;
+    right: 10px;
+    width: 30px;
+}
+
 .web3 {
     height: 30%;
 }

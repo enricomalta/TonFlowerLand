@@ -542,8 +542,6 @@ export async function UpdateTime(userData) {
 
 
 // Atualiza a UI quando a wallet está conectada
-
-
 export function updateUIForConnectedWallet(wallet) {
     const top = document.getElementById("top");
     const down = document.getElementById("down");
@@ -587,7 +585,7 @@ export function updateUIForDisconnectedWallet() {
     playModal.style.display = "flex";
 }
 
-// // Função para limpar um slot do inventário
+// Função para limpar um slot do inventário
 export function limparSlot(slotIndex) {
     const titleElement = document.querySelector(`#titleInvetorySlot${slotIndex}`);
     const imgElement = document.querySelector(`#imgSlotInventory${slotIndex}`);

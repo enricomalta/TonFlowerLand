@@ -62,6 +62,7 @@ export function addSlotClickListeners(walletAddress) {
         }
     }
 }
+
 // Check Item Slot Click
 export async function onSlotClick(slotId, walletAddress) {
 
@@ -196,7 +197,6 @@ export function tradeHistoricoOpen() {
     document.getElementById("historyTokenCrypto").style.display = "none";
 
 }
-
 export function tradeHistoricoDepositOpen() {
     document.getElementById("tradeMenuOpen").style.display = "none";
     document.getElementById("tradeSwap").style.display = "none";
@@ -207,7 +207,6 @@ export function tradeHistoricoDepositOpen() {
     mascoteBallon("falaMascoteTextGnomo", "falaMascoteTextGnomo");
     mascoteBallon("falaMascoteTextPlanta", "falaMascoteTextPlanta");
 }
-
 export function tradeHistoricoSaqueOpen() {
     document.getElementById("tradeMenuOpen").style.display = "none";
     document.getElementById("tradeSwap").style.display = "none";
@@ -235,23 +234,46 @@ export function playOpen() {
 };
 // Abre modal Inventario
 export function inventoryOpen() {
+
     let walletAddress = getWalletAddress();
+
     closeAllModals();
+
     document.getElementById("menuInventory2").style.display = "none";
     document.getElementById("playInvetory").style.display = "flex";
     document.getElementById("playModal").style.display = "flex";
     document.getElementById("playInvetoryContent").style.display = "flex";
-    setupPagination("playInvetory", "playArrowNextInventory", "playArrowLastInventory", ".playInvetorySlots", 4);
+
+    setupPagination(
+        "playInvetory",
+        "playArrowNextInventory",
+        "playArrowLastInventory",
+        ".playInvetorySlots",
+        4
+    );
+
     // Remove 'pointer' de todos os slots antes de abrir o inventário
     const allSlots = document.querySelectorAll(".playInvetorySlot");
+
     allSlots.forEach(slot => {
         slot.classList.remove("pointer");
     });
-    // ✅ KILL-SWITCH: Reset quando abre inventário normal (sementes)
+
+    // ✅ KILL-SWITCH:
+    // Garante que o inventário normal não seja tratado como utilitário
     isPlayUtilitarioActive = false;
+
+    // ✅ LIMPA TODOS OS SLOTS antes de carregar as sementes
+    for (let i = 1; i <= 24; i++) {
+        limparSlot(i);
+    }
+
+    // Mostra as setas da paginação
     for (let i = 0; i < arrow.length; i++) {
         arrow[i].style.display = "flex";
     }
+
+    // Agora carrega novamente o inventário normal (sementes)
     UpdateUI(walletAddress);
 }
 // Fecha todos Modais
@@ -278,37 +300,60 @@ export function closeAllModals() {
 
 
 
-//  Função para mostrar inventario sementes apos usar utilitario
+// Função para mostrar inventário de sementes após usar utilitário
 export function mostrarInventarioSementes() {
     // ✅ KILL-SWITCH: Reset quando volta para sementes após usar utilitário
     isPlayUtilitarioActive = false;
-    UpdateUI(getWalletAddress());
-    limparSlot();
-    atualizarSlot();
 
-    // Defina o modo para semente e reatribua os listeners de plantio
+    // Esconde/limpa TODOS os slots antes de carregar as sementes
+    for (let i = 1; i <= 24; i++) {
+        limparSlot(i);
+    }
+
+    // Atualiza os dados da carteira
+    UpdateUI(getWalletAddress());
+
+    // Define o modo para semente
     setModoInventario("semente");
+
+    // Reatribui os listeners de plantio
     if (typeof plantVaso === "function") {
         plantVaso();
     }
+
+    // Mostra as setas da paginação
     for (let i = 0; i < arrow.length; i++) {
         arrow[i].style.display = "flex";
     }
 
+    // Atualiza o inventário de sementes
+    atualizarSlot();
 }
+
+
 // Função para mostrar apenas utilitários no inventário
 export async function mostrarInventarioUtilitarios() {
     // ✅ KILL-SWITCH: Define que o menu de utilitários está ativo
     isPlayUtilitarioActive = true;
-    
-    setupPagination("playInvetory", "playArrowNextInventory", "playArrowLastInventory", ".playInvetorySlots", 2);
+
+    setupPagination(
+        "playInvetory",
+        "playArrowNextInventory",
+        "playArrowLastInventory",
+        ".playInvetorySlots",
+        2
+    );
+
     const menuInventory2 = document.getElementById("menuInventory2");
+
     for (let i = 0; i < arrow.length; i++) {
         arrow[i].style.display = "none";
     }
 
-    if (menuInventory2) menuInventory2.style.display = "none";
-    
+    if (menuInventory2) {
+        menuInventory2.style.display = "none";
+    }
+
     try {
         if (!window.userData || !Array.isArray(window.userData.inventario)) {
             console.error("Dados do usuário ou inventário não disponíveis.");
@@ -321,37 +366,68 @@ export async function mostrarInventarioUtilitarios() {
             "Anti-Parasitas": "quantityAntiParasita",
         };
 
-        const itensUtilitarios = window.userData.inventario.filter(item => {
-            const [itemNome] = item.split(":").map(part => part.trim());
-            return itemMap[itemNome] !== undefined;
-        }).slice(0, 4);
+        const itensUtilitarios = window.userData.inventario
+            .filter(item => {
+                const [itemNome] = item.split(":").map(part => part.trim());
+                return itemMap[itemNome] !== undefined;
+            })
+            .slice(0, 4);
 
+        // Limpa TODOS os slots antes de carregar os utilitários
         for (let i = 1; i <= 24; i++) {
             limparSlot(i);
         }
 
         itensUtilitarios.forEach((item, index) => {
-            const [itemNome, quantidade] = item.split(":").map(part => part.trim());
+            const [itemNome, quantidade] = item
+                .split(":")
+                .map(part => part.trim());
+
             const slotIndex = index + 1;
-            const matchingItem = window.userData.items.find(i => i.itemNome === itemNome);
+
+            const matchingItem = window.userData.items.find(
+                i => i.itemNome === itemNome
+            );
 
             if (!matchingItem) {
                 console.warn(`Item '${itemNome}' não encontrado na loja.`);
                 return;
             }
 
-            atualizarSlot(slotIndex, itemNome, matchingItem.itemId, quantidade);
-            const slotElement = document.querySelector(`#playInvetorySlot${slotIndex}`);
+            atualizarSlot(
+                slotIndex,
+                itemNome,
+                matchingItem.itemId,
+                quantidade
+            );
+
+            const slotElement = document.querySelector(
+                `#playInvetorySlot${slotIndex}`
+            );
+
             if (slotElement) {
                 const newSlotElement = slotElement.cloneNode(true);
-                slotElement.parentNode.replaceChild(newSlotElement, slotElement);
-                newSlotElement.addEventListener("click", () => aplicarUtilitario(matchingItem));
+
+                slotElement.parentNode.replaceChild(
+                    newSlotElement,
+                    slotElement
+                );
+
+                newSlotElement.addEventListener("click", () => {
+                    aplicarUtilitario(matchingItem);
+                });
             } else {
-                console.error(`Slot #playInvetorySlot${slotIndex} não encontrado!`);
+                console.error(
+                    `Slot #playInvetorySlot${slotIndex} não encontrado!`
+                );
             }
         });
+
     } catch (error) {
-        console.error("Erro ao mostrar inventário de utilitários:", error);
+        console.error(
+            "Erro ao mostrar inventário de utilitários:",
+            error
+        );
     }
 }
 
