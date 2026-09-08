@@ -143,9 +143,6 @@ img:focus {
 .top {
     max-height: 7%;
     min-height: 7%;
-    border: 1px solid var(--borderGameBorder);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
 }
 .coins {
     width: 100%;
@@ -223,9 +220,6 @@ img:focus {
 .middle {
     height: 86%;
     background: white;
-    border: 1px solid var(--borderGameBorder);
-    border-top: 0px solid transparent;
-    border-bottom: 0px solid transparent;
 }
 .overlay {
     display: none; /* Oculto por padrão */
@@ -402,8 +396,6 @@ img:focus {
     position: absolute;
     width: 348px;
     height: 557px;
-    border-bottom: 1px solid var(--borderGameBorder);
-    border-top: 1px solid var(--borderGameBorder);
 }
 #shopModal {
     display: none;
@@ -433,24 +425,19 @@ img:focus {
     background: var(--trade-color);
     width: 348px;
     /* height: 559px; */
-    /* border-left: 1px solid var(--borderGameBorder);
-    border-right: 1px solid var(--borderGameBorder); */
 }
 #playMenuOpen {
     display: none;
     background: var(--play-color);
     width: 348px;
     height: 559px;
-    border-left: 1px solid var(--borderGameBorder);
-    border-right: 1px solid var(--borderGameBorder);
+
 }
 #playGameBoard{
     display: none;
     background: var(--play-color);
     width: 348px;
     height: 559px;
-    border-left: 1px solid var(--borderGameBorder);
-    border-right: 1px solid var(--borderGameBorder);
 }
 #playInvetory {
     display: none;
@@ -458,8 +445,7 @@ img:focus {
     /* background: var(--play-color); */
     width: 348px;
     height: 559px;
-    border-left: 1px solid var(--borderGameBorder);
-    border-right: 1px solid var(--borderGameBorder);
+
 }
 #shopMenuModal {
     display: none;
@@ -1111,26 +1097,18 @@ img:focus {
 }
 .shop {
     height: 100%;
-    /* background: var(--shop-color); */
-    border: 1px solid var(--borderGameBorder);
-    border-bottom-left-radius: 8px;
 }
 .shop img {
     width: 25%;
 }
 .play {
     height: 100%;
-    /* background: var(--play-color); */
-    border: 1px solid var(--borderGameBorder);
 }
 .play img {
     width: 25%;
 }
 .trade {
     height: 100%;
-    /* background: var(--trade-color); */
-    border: 1px solid var(--borderGameBorder);
-    border-bottom-right-radius: 8px;
 }
 .trade img{
     width: 25%;
